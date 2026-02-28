@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using PurrNet;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace ProgressiveSample
 {
@@ -27,10 +29,14 @@ namespace ProgressiveSample
         private List<Color> _originalColors = new();
         private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
+        private void Awake()
+        {
+            CacheMaterials();
+        }
+
         protected override void OnSpawned()
         {
             base.OnSpawned();
-            CacheMaterials();
             if(isServer) 
                 _health.value = _maxHealth;
         }
@@ -46,9 +52,10 @@ namespace ProgressiveSample
         {
             _materials.Clear();
             _originalColors.Clear();
-            
-            foreach (var renderer in _renderers)
+
+            for (var i = 0; i < _renderers.Length; i++)
             {
+                var renderer = _renderers[i];
                 foreach (var mat in renderer.materials)
                 {
                     _materials.Add(mat);
