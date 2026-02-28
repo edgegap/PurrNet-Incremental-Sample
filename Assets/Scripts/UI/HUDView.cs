@@ -1,11 +1,14 @@
 using System;
 using PurrNet;
+using TMPro;
 using UnityEngine;
 
 namespace ProgressiveSample
 {
     public class HUDView : MonoBehaviour
     {
+        [SerializeField] private TMP_Text _baseWoodCountText;
+        
         private void Awake()
         {
             InstanceHandler.RegisterInstance(this);
@@ -20,6 +23,11 @@ namespace ProgressiveSample
         public void UpdateProgressBar(float maxCapacityStep)
         {
             
+        }
+
+        public void UpdateBaseWoodCount(int count)
+        {
+            _baseWoodCountText.text = count.ToString();
         }
     }
 }

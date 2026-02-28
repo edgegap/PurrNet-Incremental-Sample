@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
+using PurrNet;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace ProgressiveSample
 {
-    public class Base : MonoBehaviour
+    public class Base : NetworkIdentity
     {
         [Header("Deposit Animation")]
         [SerializeField] private float _baseDepositInterval = 0.3f;
@@ -25,12 +28,36 @@ namespace ProgressiveSample
         private bool _isDepositing;
         private int _startingLootCount;
 
+        private SyncVar<int> _woodCount = new(-1);
+
         private struct FlyingLoot
         {
             public Loot Loot;
             public Vector3 StartPosition;
             public float Progress;
             public float SpiralAngle;
+        }
+
+        private void OnEnable()
+        {
+            _woodCount.onChanged += OnWoodChanged;
+        }
+
+        private void OnDisable()
+        {
+            _woodCount.onChanged -= OnWoodChanged;
+        }
+
+        private void OnWoodChanged(int newWood)
+        {
+            if(InstanceHandler.TryGetInstance(out HUDView hudView))
+                hudView.UpdateBaseWoodCount(newWood);
+        }
+
+        protected override void OnSpawned()
+        {
+            base.OnSpawned();
+            _woodCount.value = 0;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -213,6 +240,13 @@ namespace ProgressiveSample
         {
             transform.TweenComplete();
             transform.TweenPunchScale(Vector3.one * 0.1f, 0.15f);
+            AddWood();
+        }
+
+        [ServerRpc]
+        private void AddWood()
+        {
+            _woodCount.value++;
         }
     }
 }
