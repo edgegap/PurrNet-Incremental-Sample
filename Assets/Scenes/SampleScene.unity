@@ -242,7 +242,7 @@ MonoBehaviour:
   noiseScale: 0.05
   densityThreshold: 0.4
   minSpacing: 3
-  respawnDelay: 120
+  respawnDelay: 45
   overlapMask:
     serializedVersion: 2
     m_Bits: 0
