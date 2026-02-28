@@ -87,7 +87,7 @@ MonoBehaviour:
   _directChildren: []
   _networkRules: {fileID: 0}
   _visitiblityRules: {fileID: 0}
-  _moveSpeed: 8
+  _moveSpeed: 5
   _acceleration: 50
   _deceleration: 40
   _rotationSpeed: 720
