@@ -36,6 +36,7 @@ namespace ProgressiveSample
         private readonly Dictionary<Vector2Int, float> _respawnCells = new();
         private readonly List<float> _layerWeights = new();
         private readonly List<Vector2Int> _toRemoveCells = new();
+        private readonly List<Vector2Int> _toCleanupCells = new();
 
         private Collider[] _overlapBuffer = new Collider[16];
         private float _spawnTimer;
@@ -236,7 +237,7 @@ namespace ProgressiveSample
         {
             float despawnRadiusSqr = despawnRadius * despawnRadius;
 
-            _toRemoveCells.Clear();
+            _toCleanupCells.Clear();
             foreach (var kvp in _spawnedResources)
             {
                 var cell = kvp.Key;
@@ -244,7 +245,7 @@ namespace ProgressiveSample
 
                 if (!instance)
                 {
-                    _toRemoveCells.Add(cell);
+                    _toCleanupCells.Add(cell);
                     continue;
                 }
 
@@ -261,12 +262,12 @@ namespace ProgressiveSample
                 }
 
                 if (!nearAnyPlayer)
-                    _toRemoveCells.Add(cell);
+                    _toCleanupCells.Add(cell);
             }
 
-            for (int i = 0; i < _toRemoveCells.Count; i++)
+            for (int i = 0; i < _toCleanupCells.Count; i++)
             {
-                var cell = _toRemoveCells[i];
+                var cell = _toCleanupCells[i];
                 if (_spawnedResources.TryGetValue(cell, out var instance) && instance)
                     Destroy(instance);
 
@@ -275,7 +276,7 @@ namespace ProgressiveSample
                 _attemptedCells.Remove(cell);
             }
 
-            _toRemoveCells.Clear();
+            _toCleanupCells.Clear();
             foreach (var cell in _attemptedCells)
             {
                 if (_respawnCells.ContainsKey(cell)) continue;
@@ -293,11 +294,11 @@ namespace ProgressiveSample
                 }
 
                 if (!nearAny)
-                    _toRemoveCells.Add(cell);
+                    _toCleanupCells.Add(cell);
             }
 
-            for (int i = 0; i < _toRemoveCells.Count; i++)
-                _attemptedCells.Remove(_toRemoveCells[i]);
+            for (int i = 0; i < _toCleanupCells.Count; i++)
+                _attemptedCells.Remove(_toCleanupCells[i]);
         }
 
         private SpawnLayer SelectLayer(Vector3 position)
