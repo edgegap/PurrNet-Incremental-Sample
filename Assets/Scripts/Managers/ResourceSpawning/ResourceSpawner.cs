@@ -30,10 +30,17 @@ namespace ProgressiveSample
         private readonly List<Transform> _players = new();
         private readonly List<Transform> _pendingBurst = new();
         private readonly List<SpawnExclusionZone> _exclusionZones = new();
+
         private readonly HashSet<Vector2Int> _occupiedCells = new();
         private readonly HashSet<Vector2Int> _attemptedCells = new();
+        private readonly List<Vector2Int> _attemptedCellsList = new();
+
         private readonly Dictionary<Vector2Int, GameObject> _spawnedResources = new();
+        private readonly List<Vector2Int> _spawnedResourceKeys = new();
+
         private readonly Dictionary<Vector2Int, float> _respawnCells = new();
+        private readonly List<Vector2Int> _respawnCellKeys = new();
+
         private readonly List<float> _layerWeights = new();
         private readonly List<Vector2Int> _toRemoveCells = new();
         private readonly List<Vector2Int> _toCleanupCells = new();
@@ -43,6 +50,8 @@ namespace ProgressiveSample
         private float _noiseOffsetX;
         private float _noiseOffsetZ;
         private bool _initialized;
+
+        private SpawnContext _spawnContext;
 
         private void Awake()
         {
@@ -104,23 +113,33 @@ namespace ProgressiveSample
 
         public void OnResourceHarvested(GameObject resource)
         {
-            _toRemoveCells.Clear();
-            foreach (var kvp in _spawnedResources)
+            Vector2Int foundCell = default;
+            bool found = false;
+
+            for (int i = 0; i < _spawnedResourceKeys.Count; i++)
             {
-                if (kvp.Value == resource)
+                if (_spawnedResources[_spawnedResourceKeys[i]] == resource)
                 {
-                    _toRemoveCells.Add(kvp.Key);
+                    foundCell = _spawnedResourceKeys[i];
+                    found = true;
                     break;
                 }
             }
 
-            if (_toRemoveCells.Count == 0) return;
+            if (!found) return;
 
-            var cell = _toRemoveCells[0];
-            _spawnedResources.Remove(cell);
-            _occupiedCells.Remove(cell);
-            _attemptedCells.Add(cell);
-            _respawnCells[cell] = Time.time + respawnDelay;
+            RemoveSpawnedResource(foundCell);
+            _occupiedCells.Remove(foundCell);
+
+            if (!_attemptedCells.Contains(foundCell))
+            {
+                _attemptedCells.Add(foundCell);
+                _attemptedCellsList.Add(foundCell);
+            }
+
+            _respawnCells[foundCell] = Time.time + respawnDelay;
+            if (!_respawnCellKeys.Contains(foundCell))
+                _respawnCellKeys.Add(foundCell);
         }
 
         private void BurstSpawnAroundPlayer(Transform player)
@@ -158,18 +177,24 @@ namespace ProgressiveSample
 
         private void ProcessSpawning()
         {
+            float now = Time.time;
             _toRemoveCells.Clear();
-            foreach (var kvp in _respawnCells)
+
+            for (int i = 0; i < _respawnCellKeys.Count; i++)
             {
-                if (kvp.Value <= Time.time)
-                    _toRemoveCells.Add(kvp.Key);
+                var cell = _respawnCellKeys[i];
+                if (_respawnCells[cell] <= now)
+                    _toRemoveCells.Add(cell);
             }
 
             for (int i = 0; i < _toRemoveCells.Count; i++)
             {
                 var cell = _toRemoveCells[i];
                 _respawnCells.Remove(cell);
-                _attemptedCells.Remove(cell);
+                _respawnCellKeys.Remove(cell);
+
+                if (_attemptedCells.Remove(cell))
+                    _attemptedCellsList.Remove(cell);
             }
 
             int spawned = 0;
@@ -201,6 +226,7 @@ namespace ProgressiveSample
             if (_attemptedCells.Contains(cell)) return false;
 
             _attemptedCells.Add(cell);
+            _attemptedCellsList.Add(cell);
 
             Vector3 position = CellToWorld(cell);
 
@@ -229,6 +255,7 @@ namespace ProgressiveSample
 
             _occupiedCells.Add(cell);
             _spawnedResources[cell] = instance;
+            _spawnedResourceKeys.Add(cell);
 
             return true;
         }
@@ -238,10 +265,10 @@ namespace ProgressiveSample
             float despawnRadiusSqr = despawnRadius * despawnRadius;
 
             _toCleanupCells.Clear();
-            foreach (var kvp in _spawnedResources)
+            for (int i = 0; i < _spawnedResourceKeys.Count; i++)
             {
-                var cell = kvp.Key;
-                var instance = kvp.Value;
+                var cell = _spawnedResourceKeys[i];
+                var instance = _spawnedResources[cell];
 
                 if (!instance)
                 {
@@ -271,14 +298,17 @@ namespace ProgressiveSample
                 if (_spawnedResources.TryGetValue(cell, out var instance) && instance)
                     Destroy(instance);
 
-                _spawnedResources.Remove(cell);
+                RemoveSpawnedResource(cell);
                 _occupiedCells.Remove(cell);
-                _attemptedCells.Remove(cell);
+
+                if (_attemptedCells.Remove(cell))
+                    _attemptedCellsList.Remove(cell);
             }
 
             _toCleanupCells.Clear();
-            foreach (var cell in _attemptedCells)
+            for (int i = 0; i < _attemptedCellsList.Count; i++)
             {
+                var cell = _attemptedCellsList[i];
                 if (_respawnCells.ContainsKey(cell)) continue;
 
                 Vector3 cellWorld = CellToWorld(cell);
@@ -298,25 +328,32 @@ namespace ProgressiveSample
             }
 
             for (int i = 0; i < _toCleanupCells.Count; i++)
-                _attemptedCells.Remove(_toCleanupCells[i]);
+            {
+                var cell = _toCleanupCells[i];
+                if (_attemptedCells.Remove(cell))
+                    _attemptedCellsList.Remove(cell);
+            }
+        }
+
+        private void RemoveSpawnedResource(Vector2Int cell)
+        {
+            _spawnedResources.Remove(cell);
+            _spawnedResourceKeys.Remove(cell);
         }
 
         private SpawnLayer SelectLayer(Vector3 position)
         {
             float distanceFromCenter = new Vector2(position.x, position.z).magnitude;
-            SpawnContext context = new SpawnContext
-            {
-                Position = position,
-                DistanceFromCenter = distanceFromCenter,
-                GameTime = Time.time
-            };
+            _spawnContext.Position = position;
+            _spawnContext.DistanceFromCenter = distanceFromCenter;
+            _spawnContext.GameTime = Time.time;
 
             _layerWeights.Clear();
             float totalWeight = 0f;
 
             for (int i = 0; i < layers.Length; i++)
             {
-                float weight = layers[i].GetWeight(context);
+                float weight = layers[i].GetWeight(_spawnContext);
                 _layerWeights.Add(weight);
                 totalWeight += weight;
             }
