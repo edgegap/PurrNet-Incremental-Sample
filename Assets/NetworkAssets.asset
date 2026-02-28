@@ -22,6 +22,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b0b4bbdb29c323645b4f9085d2c6e693, type: 3}
   - {fileID: 8300000, guid: c4bc9ce5d86734a4f96eed7cd92684cb, type: 3}
   - {fileID: 8300000, guid: 67332ac240ae49849a8b573a16819c92, type: 3}
+  - {fileID: 8300000, guid: f2ac8d21e5be4a54baeddb5588270ad9, type: 3}
   _availableTypeNames:
   - UnityEngine.AnimationClip, UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
@@ -229,9 +230,10 @@ MonoBehaviour:
     Culture=neutral, PublicKeyToken=null
   - UnityEngine.Rendering.Universal.WhiteBalance, Unity.RenderPipelines.Universal.Runtime,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _bakedIds: 00000000010000000200000003000000
+  _bakedIds: 0000000001000000020000000300000004000000
   _bakedAssets:
   - {fileID: 8300000, guid: 99dc5e8c57fb6244ebceff59ba05c92f, type: 3}
   - {fileID: 8300000, guid: b0b4bbdb29c323645b4f9085d2c6e693, type: 3}
   - {fileID: 8300000, guid: c4bc9ce5d86734a4f96eed7cd92684cb, type: 3}
   - {fileID: 8300000, guid: 67332ac240ae49849a8b573a16819c92, type: 3}
+  - {fileID: 8300000, guid: f2ac8d21e5be4a54baeddb5588270ad9, type: 3}
