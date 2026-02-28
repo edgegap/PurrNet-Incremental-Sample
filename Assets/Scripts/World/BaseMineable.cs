@@ -94,6 +94,8 @@ namespace ProgressiveSample
         private void SpawnDrops()
         {
             int count = Random.Range(_dropCount.x, _dropCount.y + 1);
+            if (InstanceHandler.TryGetInstance(out PlayerUpgrades upgrades))
+                count += (int)upgrades.GetStatBonus(UpgradeType.WoodPerTree);
             
             for (int i = 0; i < count; i++)
             {
