@@ -237,7 +237,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 16c5c2b5a7e14304fa81bd56e7c94353, type: 2}
   spawnRadius: 50
   despawnRadius: 100
-  maxSpawnsPerFrame: 5
+  maxSpawnsPerFrame: 15
   spawnInterval: 0.05
   noiseScale: 0.05
   densityThreshold: 0.4
