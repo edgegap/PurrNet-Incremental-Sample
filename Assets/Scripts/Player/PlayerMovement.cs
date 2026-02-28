@@ -33,7 +33,7 @@ namespace ProgressiveSample
             base.OnSpawned();
             if (isOwner)
             {
-                _audioSourceTransform = new GameObject().transform;
+                _audioSourceTransform = new GameObject("LocalAudio").transform;
                 _audioSourceTransform.gameObject.AddComponent<AudioListener>();
             }
         }
