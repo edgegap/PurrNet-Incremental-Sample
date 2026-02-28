@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ede8df5a0a90ea43a88ca666127d73f, type: 3}
+  m_Name: TreeSpawnLayer
+  m_EditorClassIdentifier: PurrGressive::PurrGressive.TreeSpawnLayer
+  prefabs:
+  - {fileID: 5246857646858806224, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
+  - {fileID: 4911848790288399926, guid: c48ef48ef817b86499cbc89ce42e124a, type: 3}
+  minDistanceBetween: 2
+  exclusionRadius: 1
+  baseWeight: 1
+  minDistance: 0
+  maxDistance: 3.4028235e+38
+  minScale: 0.8
+  maxScale: 1.35
