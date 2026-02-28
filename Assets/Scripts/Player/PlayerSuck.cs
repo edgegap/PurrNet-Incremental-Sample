@@ -60,8 +60,11 @@ namespace ProgressiveSample
 
         public event Action<int> onCapturedItemsChanged;
 
+        private int maxCapacity => _maxCapacity +
+            (InstanceHandler.TryGetInstance(out PlayerUpgrades u) ? (int)u.GetStatBonus(UpgradeType.InventorySpace) : 0);
+
         public int currentCapacity => _capturedItems.Count;
-        public float maxCapacityStep => (float)_capturedItems.Count / _maxCapacity;
+        public float maxCapacityStep => (float)_capturedItems.Count / maxCapacity;
 
         private void Awake()
         {
@@ -127,7 +130,7 @@ namespace ProgressiveSample
 
         private void DetectSuckables()
         {
-            if (_capturedItems.Count >= _maxCapacity) return;
+            if (_capturedItems.Count >= maxCapacity) return;
 
             int count = Physics.OverlapSphereNonAlloc(_suckPoint.position, _coneRange, _overlapResults, _suckableLayers);
             
@@ -265,7 +268,7 @@ namespace ProgressiveSample
 
         private void CaptureItem(ISuckable suckable, SuckingState state)
         {
-            if (_capturedItems.Count < _maxCapacity)
+            if (_capturedItems.Count < maxCapacity)
             {
                 _capturedItems.Add(suckable);
                 suckable.SetVisible(false);
