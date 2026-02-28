@@ -20,6 +20,10 @@ namespace ProgressiveSample
         [SerializeField] private float _wobbleFrequency = 8f;
         [SerializeField] private float _wobbleAmplitude = 0.15f;
         [SerializeField] private AnimationCurve _flyCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+        
+        [Header("Audio")] 
+        [SerializeField] private List<AudioClip> _pickupSounds = new();
+        [SerializeField] private Vector2 _pitchRange = new(0.7f, 1.3f);
 
         private PlayerSuck _playerInRange;
         private readonly List<FlyingLoot> _flyingLoot = new();
@@ -40,15 +44,15 @@ namespace ProgressiveSample
 
         private void OnEnable()
         {
-            _woodCount.onChanged += OnWoodChanged;
+            _woodCount.onChangedWithOld += OnWoodChanged;
         }
 
         private void OnDisable()
         {
-            _woodCount.onChanged -= OnWoodChanged;
+            _woodCount.onChangedWithOld -= OnWoodChanged;
         }
 
-        private void OnWoodChanged(int newWood)
+        private void OnWoodChanged(int oldWood, int newWood)
         {
             if(InstanceHandler.TryGetInstance(out HUDView hudView))
                 hudView.UpdateBaseWoodCount(newWood);
@@ -241,6 +245,8 @@ namespace ProgressiveSample
         {
             transform.TweenComplete();
             transform.TweenPunchScale(Vector3.one * 0.1f, 0.15f);
+            if(InstanceHandler.TryGetInstance(out NetworkAudioHelper helper))
+                helper.PlayRandom(_pickupSounds, transform.position, Random.Range(_pitchRange.x, _pitchRange.y));
             AddWood();
         }
 
