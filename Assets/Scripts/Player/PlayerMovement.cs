@@ -68,11 +68,14 @@ namespace ProgressiveSample
                 _audioSourceTransform.position = transform.position;
         }
 
+        private float MoveSpeed => _moveSpeed +
+            (InstanceHandler.TryGetInstance(out PlayerUpgrades u) ? u.GetStatBonus(UpgradeType.MoveSpeed) : 0f);
+
         public void HandlePlayerMovement(bool movement = true, bool rotation = true)
         {
             Vector2 input = InputManager.Instance.GameControls.Move.ReadValue<Vector2>();
             Vector3 targetDirection = new Vector3(input.x, 0f, input.y).normalized;
-            Vector3 targetVelocity = targetDirection * _moveSpeed;
+            Vector3 targetVelocity = targetDirection * MoveSpeed;
 
             float accel = targetDirection.sqrMagnitude > 0.01f ? _acceleration : _deceleration;
             _currentVelocity = Vector3.MoveTowards(_currentVelocity, targetVelocity, accel * Time.deltaTime);
