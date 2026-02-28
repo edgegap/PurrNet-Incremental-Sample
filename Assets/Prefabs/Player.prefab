@@ -93,7 +93,7 @@ MonoBehaviour:
   _rotationSpeed: 720
   _dashState: {fileID: 3339772663024868239}
   _suckState: {fileID: 7470911846739447712}
-  _netAnim: {fileID: 0}
+  _netAnim: {fileID: 1581374521443038912}
 --- !u!114 &3339772663024868239
 MonoBehaviour:
   m_ObjectHideFlags: 0

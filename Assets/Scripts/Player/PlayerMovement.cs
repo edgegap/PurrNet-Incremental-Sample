@@ -64,7 +64,7 @@ namespace ProgressiveSample
 
             if (rotation && targetDirection.sqrMagnitude > 0.01f)
             {
-                if(_netAnim)
+                if(_netAnim && isCurrentState)
                     _netAnim.SetBool("Moving", true);
                 _lastMoveDirection = targetDirection;
                 Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
