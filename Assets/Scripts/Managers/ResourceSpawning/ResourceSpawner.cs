@@ -77,8 +77,9 @@ namespace ProgressiveSample
             _pendingBurst.Clear();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             InstanceHandler.UnregisterInstance<ResourceSpawner>();
         }
 
