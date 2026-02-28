@@ -900,6 +900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: ProgressiveSample::ProgressiveSample.HUDView
   _baseWoodCountText: {fileID: 2135859922}
   _currentWoodFill: {fileID: 981698946}
+  _currentWoodParent: {fileID: 2068254753}
 --- !u!1 &599247919
 GameObject:
   m_ObjectHideFlags: 0
