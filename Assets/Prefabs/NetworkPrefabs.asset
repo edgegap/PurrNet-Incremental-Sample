@@ -24,7 +24,7 @@ MonoBehaviour:
     warmupCount: 10
   - guid: 4e9f42b99dd06a94a857456b9691c6a4
     prefab: {fileID: 5246857646858806224, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
-    pooled: 0
+    pooled: 1
     warmupCount: 5
   - guid: 5e2ce18c3e7ca2a47abdf9a536f526c4
     prefab: {fileID: 967205014532524401, guid: 5e2ce18c3e7ca2a47abdf9a536f526c4, type: 3}
@@ -32,5 +32,5 @@ MonoBehaviour:
     warmupCount: 5
   - guid: c48ef48ef817b86499cbc89ce42e124a
     prefab: {fileID: 4911848790288399926, guid: c48ef48ef817b86499cbc89ce42e124a, type: 3}
-    pooled: 0
+    pooled: 1
     warmupCount: 5
