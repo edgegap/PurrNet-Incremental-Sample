@@ -26,6 +26,13 @@ namespace ProgressiveSample
                 Debug.LogError("PlayerMovement failed to get Rigidbody component!", this);
         }
 
+        protected override void OnSpawned()
+        {
+            base.OnSpawned();
+            if (isOwner)
+                gameObject.AddComponent<AudioListener>();
+        }
+
         public override void Enter()
         {
             base.Enter();

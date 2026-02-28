@@ -18,6 +18,10 @@ namespace ProgressiveSample
         [SerializeField] private float _flashIntensity = 0.5f;
         [SerializeField] private float _flashDuration = 0.1f;
         [SerializeField] private Renderer[] _renderers;
+
+        [Header("Audio")] 
+        [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private List<AudioClip> _hitSounds;
         
         private SyncVar<int> _health = new(ownerAuth:true);
         private List<Material> _materials = new();
@@ -97,6 +101,7 @@ namespace ProgressiveSample
 
         private void PlayHitFeedback()
         {
+            _audioSource.PlayRandom(_hitSounds);
             transform.TweenComplete();
             transform.TweenPunchScale(Vector3.one * 0.2f, 0.2f);
             FlashMaterials();

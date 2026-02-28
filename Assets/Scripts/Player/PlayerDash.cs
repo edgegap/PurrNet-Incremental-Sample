@@ -22,6 +22,10 @@ namespace ProgressiveSample
         [SerializeField] private Vector3 _squishScale = new Vector3(0.7f, 0.7f, 1.3f);
         [SerializeField] private AnimationCurve _squishCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
+        [Header("Audio")] 
+        [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private List<AudioClip> _dashSounds = new();
+
         private Rigidbody _rb;
         private float _dashTimer;
         private int _originalLayer;
@@ -49,6 +53,8 @@ namespace ProgressiveSample
     
             if (_visuals)
                 _originalScale = _visuals.localScale;
+
+            _audioSource.PlayRandom(_dashSounds);
     
             if (!isOwner) return;
 
