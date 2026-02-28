@@ -52,10 +52,21 @@ namespace ProgressiveSample
             _woodCount.onChangedWithOld -= OnWoodChanged;
         }
 
+        public int woodCount => _woodCount.value;
+
+        public bool TrySpendWood(int amount)
+        {
+            if (!isServer || _woodCount.value < amount) return false;
+            _woodCount.value -= amount;
+            return true;
+        }
+
         private void OnWoodChanged(int oldWood, int newWood)
         {
             if(InstanceHandler.TryGetInstance(out HUDView hudView))
                 hudView.UpdateBaseWoodCount(newWood);
+            if(InstanceHandler.TryGetInstance(out UpgradeShopView shop))
+                shop.UpdateWoodDisplay(newWood);
         }
 
         protected override void OnSpawned()
@@ -73,6 +84,12 @@ namespace ProgressiveSample
                 _playerInRange = playerSuck;
                 _startingLootCount = playerSuck.currentCapacity;
                 _depositTimer = 0f;
+
+                if (InstanceHandler.TryGetInstance(out UpgradeShopView shop))
+                {
+                    shop.Setup(_woodCount.value);
+                    shop.Show();
+                }
                 return;
             }
 
@@ -90,6 +107,9 @@ namespace ProgressiveSample
                 return;
 
             _playerInRange = null;
+
+            if (InstanceHandler.TryGetInstance(out UpgradeShopView shop))
+                shop.Hide();
         }
 
         private void Update()
