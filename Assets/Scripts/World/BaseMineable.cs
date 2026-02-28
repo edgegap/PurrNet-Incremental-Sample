@@ -35,6 +35,13 @@ namespace ProgressiveSample
                 _health.value = _maxHealth;
         }
 
+        protected override void OnDespawned()
+        {
+            base.OnDespawned();
+            if(InstanceHandler.TryGetInstance(out ResourceSpawner spawner))
+                spawner.OnResourceHarvested(gameObject);
+        }
+
         private void CacheMaterials()
         {
             _materials.Clear();
