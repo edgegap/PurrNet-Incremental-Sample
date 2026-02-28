@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using PurrNet;
 using PurrNet.StateMachine;
 using UnityEngine;
 
@@ -33,7 +34,11 @@ namespace ProgressiveSample
         private float _lastDashTime;
         private GhostTrailEffect _ghostTrailEffect;
         private Vector3 _originalScale;
-        public int damage => _damage;
+        public int damage => _damage +
+            (InstanceHandler.TryGetInstance(out PlayerUpgrades u) ? (int)u.GetStatBonus(UpgradeType.Damage) : 0);
+
+        private float dashSpeed => _dashSpeed +
+            (InstanceHandler.TryGetInstance(out PlayerUpgrades u) ? u.GetStatBonus(UpgradeType.DashDistance) : 0f);
 
         private void Awake()
         {
@@ -108,7 +113,7 @@ namespace ProgressiveSample
             
             float speedMultiplier = _dashCurve.Evaluate(t);
             
-            Vector3 dashVelocity = transform.forward * (_dashSpeed * speedMultiplier);
+            Vector3 dashVelocity = transform.forward * (dashSpeed * speedMultiplier);
             _rb.linearVelocity = new Vector3(dashVelocity.x, _rb.linearVelocity.y, dashVelocity.z);
 
             DetectResources();
