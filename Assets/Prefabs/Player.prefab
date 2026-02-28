@@ -93,6 +93,7 @@ MonoBehaviour:
   _rotationSpeed: 720
   _dashState: {fileID: 3339772663024868239}
   _suckState: {fileID: 7470911846739447712}
+  _netAnim: {fileID: 0}
 --- !u!114 &3339772663024868239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,7 +314,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 1
 --- !u!1 &1552666109079336524
@@ -327,6 +328,8 @@ GameObject:
   - component: {fileID: 6492529055131044152}
   - component: {fileID: 3236143487171854556}
   - component: {fileID: 6158741208324429577}
+  - component: {fileID: 6523782595383184159}
+  - component: {fileID: 1581374521443038912}
   m_Layer: 7
   m_Name: Visuals
   m_TagString: Untagged
@@ -398,6 +401,53 @@ MonoBehaviour:
   - {fileID: 8374786847121269438}
   - {fileID: 1184102950457585655}
   - {fileID: 5298179203136530058}
+--- !u!95 &6523782595383184159
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552666109079336524}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b553796d3ff19bb44a81d2eb8b3191df, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1581374521443038912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552666109079336524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b598b9d8509d64abb9fdaf07fa3f6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PurrNet.Runtime::PurrNet.NetworkAnimator
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  _animator: {fileID: 6523782595383184159}
+  _ownerAuth: 1
+  _autoSyncParameters: 0
+  _dontSyncParameters: []
 --- !u!1 &7533707663642980156
 GameObject:
   m_ObjectHideFlags: 0
