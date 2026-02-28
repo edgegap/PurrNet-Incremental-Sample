@@ -1,3 +1,4 @@
+using System;
 using PurrNet;
 using PurrNet.StateMachine;
 using Unity.Cinemachine;
@@ -19,6 +20,7 @@ namespace ProgressiveSample
         private Rigidbody _rb;
         private Vector3 _lastMoveDirection = Vector3.forward;
         private Vector3 _currentVelocity;
+        private Transform _audioSourceTransform;
 
         private void Awake()
         {
@@ -30,7 +32,10 @@ namespace ProgressiveSample
         {
             base.OnSpawned();
             if (isOwner)
-                gameObject.AddComponent<AudioListener>();
+            {
+                _audioSourceTransform = new GameObject().transform;
+                _audioSourceTransform.gameObject.AddComponent<AudioListener>();
+            }
         }
 
         public override void Enter()
@@ -55,6 +60,11 @@ namespace ProgressiveSample
             if (!isOwner) return;
 
             HandlePlayerMovement();
+        }
+
+        private void Update()
+        {
+            _audioSourceTransform.position = transform.position;
         }
 
         public void HandlePlayerMovement(bool movement = true, bool rotation = true)
