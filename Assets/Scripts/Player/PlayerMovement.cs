@@ -64,7 +64,8 @@ namespace ProgressiveSample
 
         private void Update()
         {
-            _audioSourceTransform.position = transform.position;
+            if(_audioSourceTransform)
+                _audioSourceTransform.position = transform.position;
         }
 
         public void HandlePlayerMovement(bool movement = true, bool rotation = true)
