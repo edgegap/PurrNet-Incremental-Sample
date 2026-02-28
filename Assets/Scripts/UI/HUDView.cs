@@ -25,13 +25,15 @@ namespace ProgressiveSample
         public void UpdateProgressBar(float maxCapacityStep)
         {
             _currentWoodFill.TweenScale(new Vector3(maxCapacityStep, 1, 1), 0.35f);
+            _currentWoodParent.TweenComplete();
+            _currentWoodParent.TweenPunchScale(Vector3.one * 0.1f, 0.1f);
         }
 
         public void UpdateBaseWoodCount(int count)
         {
             _baseWoodCountText.text = count.ToString();
+            _baseWoodCountText.transform.TweenComplete();
             _baseWoodCountText.transform.TweenPunchScale(Vector3.one * 0.2f, 0.2f);
-            _currentWoodParent.TweenPunchScale(Vector3.one * 0.1f, 0.2f);
         }
     }
 }

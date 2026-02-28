@@ -4,11 +4,16 @@ using UnityEngine;
 
 namespace ProgressiveSample
 {
-    //This is just some super simple tweening for the sample. You can easily replace this with a bigger/proper tweening library
     public static class SimpleTween
     {
-        private static readonly Dictionary<Transform, List<Coroutine>> _transformTweens = new();
-        private static readonly Dictionary<Material, List<Coroutine>> _materialTweens = new();
+        private struct TweenEntry<TValue>
+        {
+            public Coroutine Coroutine;
+            public TValue EndValue;
+        }
+
+        private static readonly Dictionary<Transform, List<TweenEntry<Vector3>>> _transformTweens = new();
+        private static readonly Dictionary<Material, List<TweenEntry<(Color color, int propertyID)>>> _materialTweens = new();
         private static SimpleTweenRunner _runner;
 
         private static SimpleTweenRunner Runner
@@ -21,7 +26,6 @@ namespace ProgressiveSample
                     Object.DontDestroyOnLoad(go);
                     _runner = go.AddComponent<SimpleTweenRunner>();
                 }
-
                 return _runner;
             }
         }
@@ -30,39 +34,63 @@ namespace ProgressiveSample
         {
             if (_transformTweens.TryGetValue(t, out var list))
             {
-                foreach (var c in list)
-                    if (c != null)
-                        Runner.StopCoroutine(c);
+                foreach (var e in list)
+                    if (e.Coroutine != null)
+                        Runner.StopCoroutine(e.Coroutine);
                 list.Clear();
             }
         }
 
         public static void TweenComplete(this Transform t)
         {
-            t.TweenKill();
+            if (_transformTweens.TryGetValue(t, out var list))
+            {
+                foreach (var e in list)
+                {
+                    if (e.Coroutine != null)
+                        Runner.StopCoroutine(e.Coroutine);
+                    if (t) t.localScale = e.EndValue;
+                }
+                list.Clear();
+            }
         }
 
         public static void TweenScale(this Transform t, Vector3 target, float duration)
         {
             t.TweenKill();
             var c = Runner.StartCoroutine(ScaleRoutine(t, target, duration));
-            Register(_transformTweens, t, c);
+            Register(_transformTweens, t, new TweenEntry<Vector3> { Coroutine = c, EndValue = target });
         }
 
         public static void TweenPunchScale(this Transform t, Vector3 punch, float duration)
         {
             t.TweenKill();
+            Vector3 origin = t.localScale;
             var c = Runner.StartCoroutine(PunchScaleRoutine(t, punch, duration));
-            Register(_transformTweens, t, c);
+            Register(_transformTweens, t, new TweenEntry<Vector3> { Coroutine = c, EndValue = origin });
         }
 
         public static void TweenKill(this Material m)
         {
             if (_materialTweens.TryGetValue(m, out var list))
             {
-                foreach (var c in list)
-                    if (c != null)
-                        Runner.StopCoroutine(c);
+                foreach (var e in list)
+                    if (e.Coroutine != null)
+                        Runner.StopCoroutine(e.Coroutine);
+                list.Clear();
+            }
+        }
+
+        public static void TweenComplete(this Material m)
+        {
+            if (_materialTweens.TryGetValue(m, out var list))
+            {
+                foreach (var e in list)
+                {
+                    if (e.Coroutine != null)
+                        Runner.StopCoroutine(e.Coroutine);
+                    if (m) m.SetColor(e.EndValue.propertyID, e.EndValue.color);
+                }
                 list.Clear();
             }
         }
@@ -71,18 +99,17 @@ namespace ProgressiveSample
         {
             m.TweenKill();
             var c = Runner.StartCoroutine(ColorRoutine(m, target, propertyID, duration));
-            Register(_materialTweens, m, c);
+            Register(_materialTweens, m, new TweenEntry<(Color, int)> { Coroutine = c, EndValue = (target, propertyID) });
         }
 
-        private static void Register<T>(Dictionary<T, List<Coroutine>> dict, T key, Coroutine c)
+        private static void Register<T, TValue>(Dictionary<T, List<TweenEntry<TValue>>> dict, T key, TweenEntry<TValue> entry)
         {
             if (!dict.TryGetValue(key, out var list))
             {
-                list = new List<Coroutine>();
+                list = new List<TweenEntry<TValue>>();
                 dict[key] = list;
             }
-
-            list.Add(c);
+            list.Add(entry);
         }
 
         private static IEnumerator ScaleRoutine(Transform t, Vector3 target, float duration)
@@ -96,7 +123,6 @@ namespace ProgressiveSample
                 t.localScale = Vector3.LerpUnclamped(start, target, Ease(elapsed / duration));
                 yield return null;
             }
-
             if (t) t.localScale = target;
             Cleanup(_transformTweens, t);
         }
@@ -114,7 +140,6 @@ namespace ProgressiveSample
                 t.localScale = origin + punch * envelope;
                 yield return null;
             }
-
             if (t) t.localScale = origin;
             Cleanup(_transformTweens, t);
         }
@@ -134,13 +159,13 @@ namespace ProgressiveSample
             Cleanup(_materialTweens, m);
         }
 
-        private static void Cleanup<T>(Dictionary<T, List<Coroutine>> dict, T key)
+        private static void Cleanup<T, TValue>(Dictionary<T, List<TweenEntry<TValue>>> dict, T key)
         {
             if (key != null && dict.ContainsKey(key))
                 dict[key].Clear();
         }
 
-        private static float Ease(float t) => t * t * (3f - 2f * t); // smoothstep
+        private static float Ease(float t) => t * t * (3f - 2f * t);
     }
 
     public class SimpleTweenRunner : MonoBehaviour { }

@@ -87,7 +87,7 @@ MonoBehaviour:
   _directChildren: []
   _networkRules: {fileID: 0}
   _visitiblityRules: {fileID: 0}
-  _maxHealth: 10
+  _maxHealth: 1
   _dropCount: {x: 1, y: 3}
   _dropPrefab: {fileID: 1727707730744493252, guid: 32f0633564820e943a30909e14216584, type: 3}
   _dropSpawnRadius: 0.5
