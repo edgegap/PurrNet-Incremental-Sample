@@ -1,3 +1,4 @@
+using PurrNet;
 using PurrNet.StateMachine;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace ProgressiveSample
         [SerializeField] private float _rotationSpeed = 720f;
         [SerializeField] private PlayerDash _dashState;
         [SerializeField] private PlayerSuck _suckState;
+        [SerializeField] private NetworkAnimator _netAnim;
 
         private Rigidbody _rb;
         private Vector3 _lastMoveDirection = Vector3.forward;
@@ -37,6 +39,8 @@ namespace ProgressiveSample
             if (!isOwner) return;
             InputManager.Instance.GameControls.Attack.performed -= OnAttack;
             InputManager.Instance.GameControls.Suck.performed -= OnSuck;
+            if(_netAnim)
+                _netAnim.SetBool("Moving", false);
         }
 
         public override void StateUpdate()
@@ -60,9 +64,16 @@ namespace ProgressiveSample
 
             if (rotation && targetDirection.sqrMagnitude > 0.01f)
             {
+                if(_netAnim)
+                    _netAnim.SetBool("Moving", true);
                 _lastMoveDirection = targetDirection;
                 Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
                 _rb.rotation = Quaternion.RotateTowards(_rb.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            }
+            else
+            {
+                if(_netAnim)
+                    _netAnim.SetBool("Moving", false);
             }
         }
 
