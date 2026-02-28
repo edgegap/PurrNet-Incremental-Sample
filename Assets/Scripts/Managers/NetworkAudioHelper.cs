@@ -46,6 +46,7 @@ namespace ProgressiveSample
             return CreateSource();
         }
 
+        [ObserversRpc]
         public void PlayClip(AudioClip clip, Vector3 position)
         {
             if (clip == null) return;

@@ -204,6 +204,7 @@ GameObject:
   m_Component:
   - component: {fileID: 21595006}
   - component: {fileID: 21595005}
+  - component: {fileID: 21595007}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -261,6 +262,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &21595007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21595004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0786384e5028ce4b9c454915cc45b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProgressiveSample::ProgressiveSample.NetworkAudioHelper
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  _sourcePrefab: {fileID: 8361255123030769247, guid: 1801665127f9443449e004501f96eb24, type: 3}
+  _initialPoolSize: 5
 --- !u!1 &30176200
 GameObject:
   m_ObjectHideFlags: 0
@@ -1529,7 +1553,7 @@ MonoBehaviour:
   _dontDestroyOnLoad: 0
   _transport: {fileID: 1311721281}
   _networkPrefabs: {fileID: 11400000, guid: ef099a7441df11c4596bf7e0d104c5d9, type: 2}
-  _networkAssets: {fileID: 0}
+  _networkAssets: {fileID: 11400000, guid: bfb029392d4ed6647a52a93c01caa11f, type: 2}
   _networkRules: {fileID: 11400000, guid: d8799083b96579a42b8b2d03e4ceae98, type: 2}
   _visibilityRules: {fileID: 11400000, guid: 8f014a5bd8dc68646a2a3c0b18c5bbd8, type: 2}
   _authenticator: {fileID: 0}

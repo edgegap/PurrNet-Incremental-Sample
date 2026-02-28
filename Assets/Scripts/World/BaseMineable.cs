@@ -20,7 +20,6 @@ namespace ProgressiveSample
         [SerializeField] private Renderer[] _renderers;
 
         [Header("Audio")] 
-        [SerializeField] private AudioSource _audioSource;
         [SerializeField] private List<AudioClip> _hitSounds;
         
         private SyncVar<int> _health = new(ownerAuth:true);
@@ -63,6 +62,8 @@ namespace ProgressiveSample
 
         public void OnDashHit(PlayerDash dash)
         {
+            if(InstanceHandler.TryGetInstance(out NetworkAudioHelper helper))
+                helper.PlayRandom(_hitSounds, transform.position);
             GiveOwnership(localPlayer);
             _health.value -= dash.damage;
 
@@ -101,7 +102,6 @@ namespace ProgressiveSample
 
         private void PlayHitFeedback()
         {
-            _audioSource.PlayRandom(_hitSounds);
             transform.TweenComplete();
             transform.TweenPunchScale(Vector3.one * 0.2f, 0.2f);
             FlashMaterials();

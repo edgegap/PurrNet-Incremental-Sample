@@ -8,18 +8,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -6707992856192916689, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
-      propertyPath: MaxDistance
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: -6707992856192916689, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
-      propertyPath: rolloffMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -6707992856192916689, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
-      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
-      value: 0.7
-      objectReference: {fileID: 0}
     - target: {fileID: 3988518711687525562, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
       propertyPath: _maxHealth
       value: 2
@@ -39,14 +27,6 @@ PrefabInstance:
     - target: {fileID: 4162298861411318713, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.16
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162298861411318713, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162298861411318713, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.23
       objectReference: {fileID: 0}
     - target: {fileID: 4162298861411318713, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -80,7 +60,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree-2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects:
     - {fileID: 4094352398210710417, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
     m_AddedGameObjects:
