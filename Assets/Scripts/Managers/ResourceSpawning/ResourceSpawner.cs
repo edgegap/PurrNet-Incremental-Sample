@@ -37,7 +37,8 @@ namespace ProgressiveSample
 
         private Collider[] _overlapBuffer = new Collider[16];
         private float _spawnTimer;
-        private readonly Queue<float> _respawnQueue = new();
+        private readonly Dictionary<Vector2Int, float> _respawnCells = new();
+        private readonly List<Vector2Int> _toRemoveCells = new();
         private float _noiseOffsetX;
         private float _noiseOffsetZ;
 
@@ -120,9 +121,9 @@ namespace ProgressiveSample
                 {
                     Vector2Int cell = _spawnedResources[i].Cell;
                     _occupiedCells.Remove(cell);
-                    _attemptedCells.Remove(cell);
+                    _attemptedCells.Add(cell);
                     _spawnedResources.RemoveAt(i);
-                    _respawnQueue.Enqueue(Time.time + respawnDelay);
+                    _respawnCells[cell] = Time.time + respawnDelay;
                     break;
                 }
             }
@@ -160,33 +161,25 @@ namespace ProgressiveSample
             {
                 _spawnTimer = spawnInterval;
                 ProcessSpawning();
+                CleanupDistantResources();
             }
-
-            CleanupDistantResources();
         }
 
         private void ProcessSpawning()
         {
             int spawned = 0;
 
-            while (_respawnQueue.Count > 0 && _respawnQueue.Peek() <= Time.time && spawned < maxSpawnsPerFrame)
+            var readyToRespawn = new List<Vector2Int>();
+            foreach (var kvp in _respawnCells)
             {
-                _respawnQueue.Dequeue();
-                for (int p = 0; p < _players.Count; p++)
-                {
-                    Vector3 playerPos = _players[p].position;
-                    for (int attempt = 0; attempt < maxPlacementAttempts; attempt++)
-                    {
-                        Vector2 offset = Random.insideUnitCircle * spawnRadius;
-                        Vector3 worldPos = new Vector3(playerPos.x + offset.x, 0f, playerPos.z + offset.y);
-                        if (TrySpawnAtCell(WorldToCell(worldPos)))
-                        {
-                            spawned++;
-                            goto nextRespawn;
-                        }
-                    }
-                }
-                nextRespawn:;
+                if (kvp.Value <= Time.time)
+                    readyToRespawn.Add(kvp.Key);
+            }
+
+            foreach (var cell in readyToRespawn)
+            {
+                _respawnCells.Remove(cell);
+                _attemptedCells.Remove(cell);
             }
 
             for (int p = 0; p < _players.Count && spawned < maxSpawnsPerFrame; p++)
@@ -330,19 +323,26 @@ namespace ProgressiveSample
             return count == 0;
         }
 
+        private readonly List<SpawnedResource> _cleanupSnapshot = new();
+
         private void CleanupDistantResources()
         {
             float despawnRadiusSqr = despawnRadius * despawnRadius;
 
-            for (int i = _spawnedResources.Count - 1; i >= 0; i--)
+            _cleanupSnapshot.Clear();
+            _cleanupSnapshot.AddRange(_spawnedResources);
+
+            for (int i = 0; i < _cleanupSnapshot.Count; i++)
             {
-                SpawnedResource resource = _spawnedResources[i];
+                var resource = _cleanupSnapshot[i];
+
+                if (!_spawnedResources.Contains(resource)) continue;
 
                 if (!resource.Instance)
                 {
                     _occupiedCells.Remove(resource.Cell);
                     _attemptedCells.Remove(resource.Cell);
-                    _spawnedResources.RemoveAt(i);
+                    _spawnedResources.Remove(resource);
                     continue;
                 }
 
@@ -351,8 +351,7 @@ namespace ProgressiveSample
 
                 for (int p = 0; p < _players.Count; p++)
                 {
-                    Vector3 diff = _players[p].position - resourcePos;
-                    if (diff.sqrMagnitude <= despawnRadiusSqr)
+                    if ((_players[p].position - resourcePos).sqrMagnitude <= despawnRadiusSqr)
                     {
                         nearAnyPlayer = true;
                         break;
@@ -364,24 +363,33 @@ namespace ProgressiveSample
                     _occupiedCells.Remove(resource.Cell);
                     _attemptedCells.Remove(resource.Cell);
                     Destroy(resource.Instance);
-                    _spawnedResources.RemoveAt(i);
+                    _spawnedResources.Remove(resource);
                 }
             }
-            
-            var toRemove = new List<Vector2Int>();
+
+            _toRemoveCells.Clear();
             foreach (var cell in _attemptedCells)
             {
+                if (_respawnCells.ContainsKey(cell)) continue;
+
                 Vector3 cellWorld = CellToWorld(cell);
                 bool nearAny = false;
+
                 for (int p = 0; p < _players.Count; p++)
                 {
                     if ((_players[p].position - cellWorld).sqrMagnitude <= despawnRadiusSqr)
-                    { nearAny = true; break; }
+                    {
+                        nearAny = true;
+                        break;
+                    }
                 }
-                if (!nearAny) toRemove.Add(cell);
+
+                if (!nearAny)
+                    _toRemoveCells.Add(cell);
             }
-            foreach (var cell in toRemove)
-                _attemptedCells.Remove(cell);
+
+            for (int i = 0; i < _toRemoveCells.Count; i++)
+                _attemptedCells.Remove(_toRemoveCells[i]);
         }
 
         private Vector2Int WorldToCell(Vector3 position)
