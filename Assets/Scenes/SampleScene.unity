@@ -238,7 +238,7 @@ MonoBehaviour:
   spawnRadius: 50
   despawnRadius: 100
   maxSpawnsPerFrame: 5
-  spawnInterval: 0.5
+  spawnInterval: 0.05
   noiseScale: 0.05
   densityThreshold: 0.4
   minSpacing: 3
