@@ -57,7 +57,8 @@ namespace ProgressiveSample
         protected override void OnSpawned()
         {
             base.OnSpawned();
-            _woodCount.value = 0;
+            if(isServer)
+                _woodCount.value = 0;
         }
 
         private void OnTriggerEnter(Collider other)
