@@ -28,6 +28,7 @@ namespace ProgressiveSample
         public void UpdateBaseWoodCount(int count)
         {
             _baseWoodCountText.text = count.ToString();
+            _baseWoodCountText.transform.TweenPunchScale(Vector3.one * 0.2f, 0.2f);
         }
     }
 }
