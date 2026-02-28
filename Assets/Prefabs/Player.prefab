@@ -596,7 +596,7 @@ MonoBehaviour:
   _networkRules: {fileID: 0}
   _visitiblityRules: {fileID: 0}
   _zoomFov: 40
-  _fovZoomTime: 2
+  _fovZoomTime: 3.5
   _fovZoomCurve:
     serializedVersion: 2
     m_Curve:
