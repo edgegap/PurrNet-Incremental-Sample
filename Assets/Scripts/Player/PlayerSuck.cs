@@ -34,6 +34,10 @@ namespace ProgressiveSample
         [SerializeField] private Vector3 _squishScale = new(1.3f, 0.5f, 0.7f);
         [SerializeField] private float _squishTime = 0.2f;
 
+        [Header("Audio")] 
+        [SerializeField] private List<AudioClip> _pickupSounds = new();
+        [SerializeField] private Vector2 _pitchRange = new(0.7f, 1.3f);
+
         [Header("Debug")]
         [SerializeField] private bool _debugMode = true;
 
@@ -265,6 +269,8 @@ namespace ProgressiveSample
             {
                 _capturedItems.Add(suckable);
                 suckable.SetVisible(false);
+                if(InstanceHandler.TryGetInstance(out NetworkAudioHelper helper))
+                    helper.PlayRandom(_pickupSounds, transform.position, Random.Range(_pitchRange.x, _pitchRange.y));
                 onCapturedItemsChanged?.Invoke(_capturedItems.Count);
                 
                 if (_debugMode && state.Rigidbody != null) 
