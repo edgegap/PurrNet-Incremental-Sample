@@ -47,20 +47,24 @@ namespace ProgressiveSample
         }
 
         [ObserversRpc]
-        public void PlayClip(AudioClip clip, Vector3 position)
+        public void PlayClip(AudioClip clip, Vector3 position, float? pitch = null)
         {
             if (clip == null) return;
             var source = GetAvailable();
             source.transform.position = position;
             source.gameObject.SetActive(true);
             source.clip = clip;
+            if (pitch.HasValue)
+                source.pitch = pitch.Value;
+            else
+                source.pitch = _sourcePrefab.pitch;
             source.Play();
         }
 
-        public void PlayRandom(List<AudioClip> clips, Vector3 position)
+        public void PlayRandom(List<AudioClip> clips, Vector3 position, float? pitch = null)
         {
             if (clips == null || clips.Count == 0) return;
-            PlayClip(clips[Random.Range(0, clips.Count)], position);
+            PlayClip(clips[Random.Range(0, clips.Count)], position, pitch);
         }
     }
 }
