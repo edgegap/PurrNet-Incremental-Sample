@@ -44,12 +44,6 @@ namespace ProgressiveSample
                 if(InstanceHandler.TryGetInstance(out ResourceSpawner resourceSpawner))
                     resourceSpawner.RegisterPlayer(transform);
             }
-
-            if (!isOwner)
-                return;
-
-            if (InstanceHandler.TryGetInstance(out GrassInstancer grass))
-                grass.Initialize(transform);
         }
 
         protected override void OnDespawned()
