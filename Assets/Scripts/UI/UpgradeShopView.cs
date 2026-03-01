@@ -55,6 +55,8 @@ namespace ProgressiveSample
         {
             foreach (var entry in _entries)
                 Destroy(entry.gameObject);
+            foreach (Transform entry in _entriesContainer)
+                Destroy(entry.gameObject);
             _entries.Clear();
 
             if (_upgrades == null) return;
