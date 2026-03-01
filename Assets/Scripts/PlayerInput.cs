@@ -330,6 +330,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""e927ce17-064d-4939-9321-5a9ecf1c2c1f"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""4edbfa5f-d547-42f1-a90e-e83a416d3642"",
                     ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
