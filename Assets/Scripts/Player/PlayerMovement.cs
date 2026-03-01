@@ -1,7 +1,5 @@
-using System;
 using PurrNet;
 using PurrNet.StateMachine;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
