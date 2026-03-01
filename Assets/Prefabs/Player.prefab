@@ -88,7 +88,6 @@ MonoBehaviour:
   _directChildren: []
   _networkRules: {fileID: 0}
   _visitiblityRules: {fileID: 0}
-  _moveSpeed: 5
   _acceleration: 50
   _deceleration: 40
   _rotationSpeed: 720
@@ -116,8 +115,6 @@ MonoBehaviour:
   _directChildren: []
   _networkRules: {fileID: 0}
   _visitiblityRules: {fileID: 0}
-  _damage: 1
-  _dashSpeed: 25
   _dashDuration: 0.3
   _cooldown: 1
   _dashCurve:
@@ -203,7 +200,6 @@ MonoBehaviour:
   _directChildren: []
   _networkRules: {fileID: 0}
   _visitiblityRules: {fileID: 0}
-  _maxCapacity: 10
   _playerMovement: {fileID: 3563344683121144956}
   _coneRange: 8
   _coneAngle: 45
@@ -674,6 +670,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5656987046628711690}
+  - component: {fileID: 3145668547169218612}
   m_Layer: 7
   m_Name: Bodies
   m_TagString: Untagged
@@ -701,6 +698,37 @@ Transform:
   - {fileID: 4813566552053972016}
   m_Father: {fileID: 6492529055131044152}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3145668547169218612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117622753983616415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 817fe5016bd0a2a49a95b6eb338bb132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PurrNet.Runtime::PurrNet.NetworkTransform
+  _isSetup: 0
+  _prefabId: -2147483648
+  _componentIndex: -2147483648
+  _shouldBePooled: 0
+  _parent: {fileID: 0}
+  _invertedPathToNearestParent: 
+  _directChildren: []
+  _networkRules: {fileID: 0}
+  _visitiblityRules: {fileID: 0}
+  _syncPosition: 0
+  _syncRotation: 0
+  _syncScale: 1
+  _syncParent: 0
+  _interpolateSettings: 7
+  _minBufferSize: 1
+  _maxBufferSize: 2
+  _characterControllerPatch: 0
+  _ownerAuth: 1
+  _interpolationTiming: 0
 --- !u!1 &7533707663642980156
 GameObject:
   m_ObjectHideFlags: 0
