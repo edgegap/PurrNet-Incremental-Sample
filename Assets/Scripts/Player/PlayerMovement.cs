@@ -17,7 +17,6 @@ namespace ProgressiveSample
         [SerializeField] private NetworkAnimator _netAnim;
 
         private Rigidbody _rb;
-        private Vector3 _lastMoveDirection = Vector3.forward;
         private Vector3 _currentVelocity;
         private Transform _audioSourceTransform;
 
@@ -85,7 +84,6 @@ namespace ProgressiveSample
             {
                 if(_netAnim && isCurrentState)
                     _netAnim.SetBool("Moving", true);
-                _lastMoveDirection = targetDirection;
                 Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
                 _rb.rotation = Quaternion.RotateTowards(_rb.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
             }
