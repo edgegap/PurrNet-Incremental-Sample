@@ -49,7 +49,7 @@ namespace ProgressiveSample
         [ObserversRpc(runLocally:true)]
         public void PlayClip(AudioClip clip, Vector3 position, float? pitch = null)
         {
-            if (clip == null) return;
+            if (!clip) return;
             var source = GetAvailable();
             source.transform.position = position;
             source.gameObject.SetActive(true);
