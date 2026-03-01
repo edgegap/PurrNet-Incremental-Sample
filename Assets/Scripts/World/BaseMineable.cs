@@ -12,7 +12,6 @@ namespace ProgressiveSample
         [SerializeField] private int _maxHealth = 10;
         
         [Header("Drops")]
-        [SerializeField] private Vector2Int _dropCount = new(1, 3);
         [SerializeField] private Loot _dropPrefab;
         [SerializeField] private float _dropSpawnRadius = 0.5f;
         
@@ -94,7 +93,7 @@ namespace ProgressiveSample
 
         private void SpawnDrops()
         {
-            int count = Random.Range(_dropCount.x, _dropCount.y + 1) + (int)PlayerUpgrades.WoodPerTree;
+            int count = (int)PlayerUpgrades.WoodPerTree;
             
             for (int i = 0; i < count; i++)
             {
