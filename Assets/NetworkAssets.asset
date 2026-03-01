@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9ac2e59ec50867458fa45964a218963, type: 3}
   m_Name: NetworkAssets
   m_EditorClassIdentifier: PurrNet.Runtime::PurrNet.NetworkAssets
-  autoGenerate: 0
+  autoGenerate: 1
   folder: {fileID: 102900000, guid: 5fcfba93d3cc5ed4285d2a0c66cb7471, type: 3}
   _enabledTypeNames:
   - UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
