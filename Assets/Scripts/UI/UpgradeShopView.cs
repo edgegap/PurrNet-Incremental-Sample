@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using PurrNet;
 using UnityEngine;
@@ -21,6 +22,16 @@ namespace ProgressiveSample
             InstanceHandler.RegisterInstance(this);
             _panel.SetActive(false);
             if (_winPanel) _winPanel.SetActive(false);
+        }
+
+        private void OnEnable()
+        {
+            InputManager.Instance.EnableMenuControls();
+        }
+
+        private void OnDisable()
+        {
+            InputManager.Instance.EnableGameControls();
         }
 
         private void OnDestroy()
