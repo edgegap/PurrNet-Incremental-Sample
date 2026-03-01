@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3988518711687525562, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
       propertyPath: _maxHealth
-      value: 2
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3988518711687525562, guid: 4e9f42b99dd06a94a857456b9691c6a4, type: 3}
       propertyPath: _hitSounds.Array.size
