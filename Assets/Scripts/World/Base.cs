@@ -65,8 +65,6 @@ namespace ProgressiveSample
         {
             if(InstanceHandler.TryGetInstance(out HUDView hudView))
                 hudView.UpdateBaseWoodCount(newWood);
-            if(InstanceHandler.TryGetInstance(out UpgradeShopView shop))
-                shop.UpdateWoodDisplay(newWood);
         }
 
         protected override void OnSpawned()
@@ -87,7 +85,6 @@ namespace ProgressiveSample
 
                 if (InstanceHandler.TryGetInstance(out UpgradeShopView shop))
                 {
-                    shop.Setup(_woodCount.value);
                     shop.Show();
                 }
                 return;

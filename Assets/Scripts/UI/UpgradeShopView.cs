@@ -31,7 +31,7 @@ namespace ProgressiveSample
             Unsubscribe();
         }
 
-        public void Setup(int currentWood)
+        public void Setup()
         {
             if (!_initialized)
             {
@@ -43,15 +43,6 @@ namespace ProgressiveSample
                 }
                 _initialized = true;
             }
-
-            UpdateWoodDisplay(currentWood);
-        }
-
-        public void UpdateWoodDisplay(int wood)
-        {
-            _currentWood = wood;
-            if (_woodText) _woodText.text = $"Wood: {wood}";
-            Refresh();
         }
 
         public void Show() => _panel.SetActive(true);
