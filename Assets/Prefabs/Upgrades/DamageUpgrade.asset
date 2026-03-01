@@ -15,7 +15,7 @@ MonoBehaviour:
   title: Damage
   upgradeType: 0
   statBase: 1
-  statMult: 2
+  statMult: 1
   statPower: 1
   costBase: 20
   costMult: 1.5

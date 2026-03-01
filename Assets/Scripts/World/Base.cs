@@ -71,10 +71,13 @@ namespace ProgressiveSample
             return true;
         }
 
+        public event Action<int> onWoodChanged;
+
         private void OnWoodChanged(int oldWood, int newWood)
         {
             if(InstanceHandler.TryGetInstance(out HUDView hudView))
                 hudView.UpdateBaseWoodCount(newWood);
+            onWoodChanged?.Invoke(newWood);
         }
 
         protected override void OnSpawned()

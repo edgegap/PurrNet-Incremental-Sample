@@ -14,7 +14,6 @@ namespace ProgressiveSample
 
         private readonly List<UpgradeEntryView> _entries = new();
         private PlayerUpgrades _upgrades;
-        private int _currentWood;
         private bool _initialized;
 
         private void Awake()
@@ -52,6 +51,8 @@ namespace ProgressiveSample
                 }
                 _initialized = true;
             }
+
+            Refresh();
         }
 
         public void Show() => _panel.SetActive(true);
@@ -83,11 +84,14 @@ namespace ProgressiveSample
 
         private void Refresh()
         {
-            if (_upgrades != null && _upgrades.gameWon && _winPanel)
+            if (_upgrades == null) return;
+
+            if (_upgrades.gameWon && _winPanel)
                 _winPanel.SetActive(true);
 
+            int wood = _upgrades.currentWood;
             foreach (var entry in _entries)
-                entry.Refresh(_currentWood);
+                entry.Refresh(wood);
         }
 
         private void Unsubscribe()

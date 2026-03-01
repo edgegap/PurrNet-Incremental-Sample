@@ -20,6 +20,7 @@ namespace ProgressiveSample
 
         public UpgradeDefinition[] definitions => _definitions;
         public bool gameWon => _levelWinGame.value > 0;
+        public int currentWood => _base != null ? _base.woodCount : 0;
 
         protected override void OnSpawned()
         {
@@ -32,6 +33,7 @@ namespace ProgressiveSample
             _levelInventorySpace.onChangedWithOld += (_, __) => onUpgradesChanged?.Invoke();
             _levelWoodPerTree.onChangedWithOld += (_, __) => onUpgradesChanged?.Invoke();
             _levelWinGame.onChangedWithOld += (_, __) => onUpgradesChanged?.Invoke();
+            _base.onWoodChanged += _ => onUpgradesChanged?.Invoke();
         }
 
         protected override void OnDespawned()
