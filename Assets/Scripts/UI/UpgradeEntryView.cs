@@ -49,7 +49,7 @@ namespace ProgressiveSample
             float next = _definition.GetStatValue(level + 1);
             int cost = _definition.GetCost(level);
 
-            _statText.text = $"+{Format(current)}  \u2192  +{Format(next)}";
+            _statText.text = $"{Format(current)}  \u2192  {Format(next)}";
             _costText.text = $"{cost}";
             _buyButton.interactable = currentWood >= cost;
         }
