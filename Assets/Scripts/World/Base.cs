@@ -85,6 +85,7 @@ namespace ProgressiveSample
 
                 if (InstanceHandler.TryGetInstance(out UpgradeShopView shop))
                 {
+                    shop.Setup();
                     shop.Show();
                 }
                 return;

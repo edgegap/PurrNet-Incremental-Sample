@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using PurrNet;
-using TMPro;
 using UnityEngine;
 
 namespace ProgressiveSample
@@ -8,7 +7,6 @@ namespace ProgressiveSample
     public class UpgradeShopView : MonoBehaviour
     {
         [SerializeField] private GameObject _panel;
-        [SerializeField] private TextMeshProUGUI _woodText;
         [SerializeField] private Transform _entriesContainer;
         [SerializeField] private UpgradeEntryView _entryPrefab;
         [SerializeField] private GameObject _winPanel;
