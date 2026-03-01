@@ -127,6 +127,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EnterShop"",
+                    ""type"": ""Button"",
+                    ""id"": ""a6f8f3e6-d564-49ea-955a-3acb5415177e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -358,6 +367,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Suck"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee9a27df-2de6-4623-a3c9-294a4963b89d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnterShop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -949,6 +969,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Game_Attack = m_Game.FindAction("Attack", throwIfNotFound: true);
         m_Game_Mouse = m_Game.FindAction("Mouse", throwIfNotFound: true);
         m_Game_Suck = m_Game.FindAction("Suck", throwIfNotFound: true);
+        m_Game_EnterShop = m_Game.FindAction("EnterShop", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Navigate = m_Menu.FindAction("Navigate", throwIfNotFound: true);
@@ -1046,6 +1067,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Game_Attack;
     private readonly InputAction m_Game_Mouse;
     private readonly InputAction m_Game_Suck;
+    private readonly InputAction m_Game_EnterShop;
     /// <summary>
     /// Provides access to input actions defined in input action map "Game".
     /// </summary>
@@ -1073,6 +1095,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Game/Suck".
         /// </summary>
         public InputAction @Suck => m_Wrapper.m_Game_Suck;
+        /// <summary>
+        /// Provides access to the underlying input action "Game/EnterShop".
+        /// </summary>
+        public InputAction @EnterShop => m_Wrapper.m_Game_EnterShop;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1111,6 +1137,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Suck.started += instance.OnSuck;
             @Suck.performed += instance.OnSuck;
             @Suck.canceled += instance.OnSuck;
+            @EnterShop.started += instance.OnEnterShop;
+            @EnterShop.performed += instance.OnEnterShop;
+            @EnterShop.canceled += instance.OnEnterShop;
         }
 
         /// <summary>
@@ -1134,6 +1163,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Suck.started -= instance.OnSuck;
             @Suck.performed -= instance.OnSuck;
             @Suck.canceled -= instance.OnSuck;
+            @EnterShop.started -= instance.OnEnterShop;
+            @EnterShop.performed -= instance.OnEnterShop;
+            @EnterShop.canceled -= instance.OnEnterShop;
         }
 
         /// <summary>
@@ -1462,6 +1494,13 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSuck(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "EnterShop" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnEnterShop(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Menu" which allows adding and removing callbacks.

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using PurrNet;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace ProgressiveSample
@@ -24,6 +25,9 @@ namespace ProgressiveSample
         [Header("Audio")] 
         [SerializeField] private List<AudioClip> _pickupSounds = new();
         [SerializeField] private Vector2 _pitchRange = new(0.7f, 1.3f);
+        
+        [Header("Misc")]
+        [SerializeField] private GameObject _openShopCanvas;
 
         private PlayerSuck _playerInRange;
         private readonly List<FlyingLoot> _flyingLoot = new();
@@ -40,6 +44,12 @@ namespace ProgressiveSample
             public Vector3 StartPosition;
             public float Progress;
             public float SpiralAngle;
+        }
+
+        private void Awake()
+        {
+            if(_openShopCanvas)
+                _openShopCanvas.SetActive(false);
         }
 
         private void OnEnable()
@@ -85,8 +95,9 @@ namespace ProgressiveSample
 
                 if (InstanceHandler.TryGetInstance(out UpgradeShopView shop))
                 {
-                    shop.Setup();
-                    shop.Show();
+                    InputManager.Instance.GameControls.EnterShop.performed += OnClickedShop;
+                    if(_openShopCanvas)
+                        _openShopCanvas.SetActive(true);
                 }
                 return;
             }
@@ -107,7 +118,20 @@ namespace ProgressiveSample
             _playerInRange = null;
 
             if (InstanceHandler.TryGetInstance(out UpgradeShopView shop))
-                shop.Hide();
+            {
+                InputManager.Instance.GameControls.EnterShop.performed -= OnClickedShop;
+                if(_openShopCanvas)
+                    _openShopCanvas.SetActive(false);
+            }
+        }
+
+        private void OnClickedShop(InputAction.CallbackContext obj)
+        {
+            if (InstanceHandler.TryGetInstance(out UpgradeShopView shop))
+            {
+                shop.Setup();
+                shop.Show();
+            }
         }
 
         private void Update()
