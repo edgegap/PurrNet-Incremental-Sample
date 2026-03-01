@@ -309,6 +309,11 @@ MonoBehaviour:
   _visitiblityRules: {fileID: 0}
   _definitions:
   - {fileID: 11400000, guid: f920fa267d9e80749a6f8e5c023e9f77, type: 2}
+  - {fileID: 11400000, guid: 410e07479242f2741a3841aaa721d9bf, type: 2}
+  - {fileID: 11400000, guid: 775499dcac5a2664fb9751b5ac1bd898, type: 2}
+  - {fileID: 11400000, guid: 0fe6a5554c14a824e8e69698d46c2c6a, type: 2}
+  - {fileID: 11400000, guid: 00c1b69391d6f4247a11d4cbfa03bfcf, type: 2}
+  - {fileID: 11400000, guid: 6fac246670ff6424fbbe6cc0494f2a1a, type: 2}
   _base: {fileID: 1070745542}
 --- !u!1 &30176200
 GameObject:

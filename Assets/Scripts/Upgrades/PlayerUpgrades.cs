@@ -16,38 +16,75 @@ namespace ProgressiveSample
         private readonly SyncVar<int> _levelWoodPerTree = new(0);
         private readonly SyncVar<int> _levelWinGame = new(0);
 
+        public static bool CacheReady { get; private set; }
+        public static float Damage { get; private set; }
+        public static float DashDistance { get; private set; }
+        public static float MoveSpeed { get; private set; }
+        public static float InventorySpace { get; private set; }
+        public static float WoodPerTree { get; private set; }
+
         public event Action onUpgradesChanged;
 
         public UpgradeDefinition[] definitions => _definitions;
         public bool gameWon => _levelWinGame.value > 0;
         public int currentWood => _base != null ? _base.woodCount : 0;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            CacheReady = false;
+            Damage = 0f;
+            DashDistance = 0f;
+            MoveSpeed = 0f;
+            InventorySpace = 0f;
+            WoodPerTree = 0f;
+        }
+
         protected override void OnSpawned()
         {
             base.OnSpawned();
             InstanceHandler.RegisterInstance(this);
 
-            _levelDamage.onChangedWithOld += (_, __) => onUpgradesChanged?.Invoke();
-            _levelDashDistance.onChangedWithOld += (_, __) => onUpgradesChanged?.Invoke();
-            _levelMoveSpeed.onChangedWithOld += (_, __) => onUpgradesChanged?.Invoke();
-            _levelInventorySpace.onChangedWithOld += (_, __) => onUpgradesChanged?.Invoke();
-            _levelWoodPerTree.onChangedWithOld += (_, __) => onUpgradesChanged?.Invoke();
-            _levelWinGame.onChangedWithOld += (_, __) => onUpgradesChanged?.Invoke();
+            _levelDamage.onChangedWithOld += (_, __) => OnLevelChanged();
+            _levelDashDistance.onChangedWithOld += (_, __) => OnLevelChanged();
+            _levelMoveSpeed.onChangedWithOld += (_, __) => OnLevelChanged();
+            _levelInventorySpace.onChangedWithOld += (_, __) => OnLevelChanged();
+            _levelWoodPerTree.onChangedWithOld += (_, __) => OnLevelChanged();
+            _levelWinGame.onChangedWithOld += (_, __) => OnLevelChanged();
             _base.onWoodChanged += _ => onUpgradesChanged?.Invoke();
+
+            RefreshCache();
         }
 
         protected override void OnDespawned()
         {
             base.OnDespawned();
             InstanceHandler.UnregisterInstance<PlayerUpgrades>();
+            CacheReady = false;
+        }
+
+        private void OnLevelChanged()
+        {
+            RefreshCache();
+            onUpgradesChanged?.Invoke();
+        }
+
+        private void RefreshCache()
+        {
+            Damage = GetStatValue(UpgradeType.Damage);
+            DashDistance = GetStatValue(UpgradeType.DashDistance);
+            MoveSpeed = GetStatValue(UpgradeType.MoveSpeed);
+            InventorySpace = GetStatValue(UpgradeType.InventorySpace);
+            WoodPerTree = GetStatValue(UpgradeType.WoodPerTree);
+            CacheReady = true;
         }
 
         public int GetLevel(UpgradeType type) => GetLevelVar(type).value;
 
-        public float GetStatBonus(UpgradeType type)
+        public float GetStatValue(UpgradeType type)
         {
             var def = GetDefinition(type);
-            return def == null ? 0f : def.GetStatBonus(GetLevel(type));
+            return def == null ? 0f : def.GetStatValue(GetLevel(type));
         }
 
         public UpgradeDefinition GetDefinition(UpgradeType type)

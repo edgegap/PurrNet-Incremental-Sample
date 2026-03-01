@@ -40,13 +40,13 @@ namespace ProgressiveSample
 
                 _statText.text = "Win the game";
                 int winCost = _definition.GetCost(0);
-                _costText.text = $"{winCost} wood";
+                _costText.text = $"{winCost}";
                 _buyButton.interactable = currentWood >= winCost;
                 return;
             }
 
-            float current = _definition.GetStatBonus(level);
-            float next = _definition.GetStatBonus(level + 1);
+            float current = _definition.GetStatValue(level);
+            float next = _definition.GetStatValue(level + 1);
             int cost = _definition.GetCost(level);
 
             _statText.text = $"+{Format(current)}  \u2192  +{Format(next)}";

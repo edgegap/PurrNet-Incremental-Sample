@@ -68,8 +68,9 @@ namespace ProgressiveSample
                 _audioSourceTransform.position = transform.position;
         }
 
-        private float MoveSpeed => _moveSpeed +
-            (InstanceHandler.TryGetInstance(out PlayerUpgrades u) ? u.GetStatBonus(UpgradeType.MoveSpeed) : 0f);
+        private float MoveSpeed => PlayerUpgrades.CacheReady
+            ? PlayerUpgrades.MoveSpeed
+            : _moveSpeed;
 
         public void HandlePlayerMovement(bool movement = true, bool rotation = true)
         {

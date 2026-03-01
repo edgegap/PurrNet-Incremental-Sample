@@ -60,8 +60,9 @@ namespace ProgressiveSample
 
         public event Action<int> onCapturedItemsChanged;
 
-        private int maxCapacity => _maxCapacity +
-            (InstanceHandler.TryGetInstance(out PlayerUpgrades u) ? (int)u.GetStatBonus(UpgradeType.InventorySpace) : 0);
+        private int maxCapacity => PlayerUpgrades.CacheReady
+            ? Mathf.Max(1, (int)PlayerUpgrades.InventorySpace)
+            : _maxCapacity;
 
         public int currentCapacity => _capturedItems.Count;
         public float maxCapacityStep => (float)_capturedItems.Count / maxCapacity;

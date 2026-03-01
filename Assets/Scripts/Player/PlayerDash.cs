@@ -34,11 +34,13 @@ namespace ProgressiveSample
         private float _lastDashTime;
         private GhostTrailEffect _ghostTrailEffect;
         private Vector3 _originalScale;
-        public int damage => _damage +
-            (InstanceHandler.TryGetInstance(out PlayerUpgrades u) ? (int)u.GetStatBonus(UpgradeType.Damage) : 0);
+        public int damage => PlayerUpgrades.CacheReady
+            ? Mathf.Max(1, (int)PlayerUpgrades.Damage)
+            : _damage;
 
-        private float dashSpeed => _dashSpeed +
-            (InstanceHandler.TryGetInstance(out PlayerUpgrades u) ? u.GetStatBonus(UpgradeType.DashDistance) : 0f);
+        private float DashSpeed => PlayerUpgrades.CacheReady
+            ? PlayerUpgrades.DashDistance
+            : _dashSpeed;
 
         private void Awake()
         {
@@ -113,7 +115,7 @@ namespace ProgressiveSample
             
             float speedMultiplier = _dashCurve.Evaluate(t);
             
-            Vector3 dashVelocity = transform.forward * (dashSpeed * speedMultiplier);
+            Vector3 dashVelocity = transform.forward * (DashSpeed * speedMultiplier);
             _rb.linearVelocity = new Vector3(dashVelocity.x, _rb.linearVelocity.y, dashVelocity.z);
 
             DetectResources();

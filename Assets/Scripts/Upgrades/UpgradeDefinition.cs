@@ -18,9 +18,12 @@ namespace ProgressiveSample
         public string title;
         public UpgradeType upgradeType;
 
-        [Header("Stat  ·  bonus = statBase * level + statMult * level ^ statPower")]
+        [Header("Stat  ·  value = statBase + statMult * level ^ statPower")]
+        [Tooltip("The value at level 0 (no upgrades purchased). Set this to the base game value for the stat.")]
         public float statBase;
+        [Tooltip("Scales the per-level growth.")]
         public float statMult;
+        [Tooltip("Controls the growth curve. 1 = linear, 2 = quadratic, etc.")]
         public float statPower = 1f;
 
         [Header("Cost  ·  cost = ceil( costBase * costMult ^ level )")]
@@ -30,7 +33,7 @@ namespace ProgressiveSample
         public int GetCost(int level) =>
             Mathf.CeilToInt(costBase * Mathf.Pow(costMult, level));
 
-        public float GetStatBonus(int level) =>
-            statBase * level + statMult * Mathf.Pow(level, statPower);
+        public float GetStatValue(int level) =>
+            statBase + statMult * Mathf.Pow(level, statPower);
     }
 }
