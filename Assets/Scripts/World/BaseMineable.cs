@@ -85,6 +85,7 @@ namespace ProgressiveSample
                 Die();
         }
 
+        [ContextMenu("Instant die"), PurrButton]
         private void Die()
         {
             SpawnDrops();
