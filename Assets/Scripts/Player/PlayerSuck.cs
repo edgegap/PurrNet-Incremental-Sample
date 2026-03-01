@@ -10,7 +10,6 @@ namespace ProgressiveSample
 {
     public class PlayerSuck : StateNode
     {
-        [SerializeField] private int _maxCapacity = 10;
         [SerializeField] private PlayerMovement _playerMovement;
         
         [Header("Cone Detection")]
@@ -60,9 +59,7 @@ namespace ProgressiveSample
 
         public event Action<int> onCapturedItemsChanged;
 
-        private int maxCapacity => PlayerUpgrades.CacheReady
-            ? Mathf.Max(1, (int)PlayerUpgrades.InventorySpace)
-            : _maxCapacity;
+        private int maxCapacity => Mathf.Max(1, (int)PlayerUpgrades.InventorySpace);
 
         public int currentCapacity => _capturedItems.Count;
         public float maxCapacityStep => (float)_capturedItems.Count / maxCapacity;

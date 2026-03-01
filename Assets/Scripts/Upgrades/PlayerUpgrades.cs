@@ -16,7 +16,6 @@ namespace ProgressiveSample
         private readonly SyncVar<int> _levelWoodPerTree = new(0);
         private readonly SyncVar<int> _levelWinGame = new(0);
 
-        public static bool CacheReady { get; private set; }
         public static float Damage { get; private set; }
         public static float DashDistance { get; private set; }
         public static float MoveSpeed { get; private set; }
@@ -32,7 +31,6 @@ namespace ProgressiveSample
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics()
         {
-            CacheReady = false;
             Damage = 0f;
             DashDistance = 0f;
             MoveSpeed = 0f;
@@ -60,7 +58,7 @@ namespace ProgressiveSample
         {
             base.OnDespawned();
             InstanceHandler.UnregisterInstance<PlayerUpgrades>();
-            CacheReady = false;
+            ResetStatics();
         }
 
         private void OnLevelChanged()
@@ -76,7 +74,6 @@ namespace ProgressiveSample
             MoveSpeed = GetStatValue(UpgradeType.MoveSpeed);
             InventorySpace = GetStatValue(UpgradeType.InventorySpace);
             WoodPerTree = GetStatValue(UpgradeType.WoodPerTree);
-            CacheReady = true;
         }
 
         public int GetLevel(UpgradeType type) => GetLevelVar(type).value;

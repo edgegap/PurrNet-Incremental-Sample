@@ -7,8 +7,6 @@ namespace ProgressiveSample
 {
     public class PlayerDash : StateNode
     {
-        [SerializeField] private int _damage = 1;
-        [SerializeField] private float _dashSpeed = 25f;
         [SerializeField] private float _dashDuration = 0.15f;
         [SerializeField] private float _cooldown = 1f;
         [SerializeField] private AnimationCurve _dashCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
@@ -34,13 +32,8 @@ namespace ProgressiveSample
         private float _lastDashTime;
         private GhostTrailEffect _ghostTrailEffect;
         private Vector3 _originalScale;
-        public int damage => PlayerUpgrades.CacheReady
-            ? Mathf.Max(1, (int)PlayerUpgrades.Damage)
-            : _damage;
-
-        private float DashSpeed => PlayerUpgrades.CacheReady
-            ? PlayerUpgrades.DashDistance
-            : _dashSpeed;
+        public int damage => Mathf.Max(1, (int)PlayerUpgrades.Damage);
+        private float DashSpeed => PlayerUpgrades.DashDistance;
 
         private void Awake()
         {

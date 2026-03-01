@@ -9,7 +9,6 @@ namespace ProgressiveSample
 {
     public class PlayerMovement : StateNode
     {
-        [SerializeField] private float _moveSpeed = 8f;
         [SerializeField] private float _acceleration = 50f;
         [SerializeField] private float _deceleration = 40f;
         [SerializeField] private float _rotationSpeed = 720f;
@@ -68,9 +67,7 @@ namespace ProgressiveSample
                 _audioSourceTransform.position = transform.position;
         }
 
-        private float MoveSpeed => PlayerUpgrades.CacheReady
-            ? PlayerUpgrades.MoveSpeed
-            : _moveSpeed;
+        private float MoveSpeed => PlayerUpgrades.MoveSpeed;
 
         public void HandlePlayerMovement(bool movement = true, bool rotation = true)
         {
