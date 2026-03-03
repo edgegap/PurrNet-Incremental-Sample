@@ -7,6 +7,6 @@ namespace ProgressiveSample
     {
         NetworkIdentity networkIdentity { get; }
         Rigidbody rigidbody { get; }
-        void SetVisible(bool visible);
+        int prefabId { get; }
     }
 }

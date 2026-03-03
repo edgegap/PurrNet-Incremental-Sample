@@ -27,17 +27,6 @@ namespace ProgressiveSample
             ToggleColliders(true);
         }
 
-        public void SetVisible(bool visible)
-        {
-            SetVisibleRpc(visible);
-        }
-
-        [ObserversRpc(bufferLast: true)]
-        private void SetVisibleRpc(bool visible)
-        {
-            gameObject.SetActive(visible);
-        }
-
         public void Pop(Vector3 origin)
         {
             Vector3 direction = (transform.position - origin).normalized;

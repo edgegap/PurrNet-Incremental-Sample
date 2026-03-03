@@ -171,10 +171,7 @@ namespace ProgressiveSample
                 _depositTimer -= interval;
         
                 var loot = _playerInRange.TakeOneLoot();
-                if (loot != null)
-                {
-                    SpawnFlyingVisual(loot);
-                }
+                StartLootFlight(loot);
             }
         }
         
@@ -192,13 +189,6 @@ namespace ProgressiveSample
                 cam.StartZoom();
             else
                 cam.StopZoom();
-        }
-
-        private void SpawnFlyingVisual(Loot loot)
-        {
-            loot.SetVisible(true);
-            loot.transform.position = _playerInRange.transform.position;
-            StartLootFlight(loot);
         }
 
         private bool IsAlreadyFlying(Loot loot)

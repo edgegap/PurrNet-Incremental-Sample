@@ -40,7 +40,7 @@ namespace ProgressiveSample
         [Header("Debug")]
         [SerializeField] private bool _debugMode = true;
 
-        private readonly List<ISuckable> _capturedItems = new();
+        private readonly Dictionary<Type, (int count, int prefabId)> _capturedItems = new();
         private readonly List<ISuckable> _beingSuckedKeys = new();
         private readonly List<SuckingState> _beingSuckedValues = new();
         private readonly List<int> _toRemoveIndices = new();
@@ -61,8 +61,18 @@ namespace ProgressiveSample
 
         private int maxCapacity => Mathf.Max(1, (int)PlayerUpgrades.InventorySpace);
 
-        public int currentCapacity => _capturedItems.Count;
-        public float maxCapacityStep => (float)_capturedItems.Count / maxCapacity;
+        public int currentCapacity
+        {
+            get
+            {
+                int total = 0;
+                foreach (var entry in _capturedItems.Values)
+                    total += entry.count;
+                return total;
+            }
+        }
+
+        public float maxCapacityStep => (float)currentCapacity / maxCapacity;
 
         private void Awake()
         {
@@ -75,7 +85,6 @@ namespace ProgressiveSample
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            
             onCapturedItemsChanged -= OnItemsChanged;
         }
 
@@ -118,8 +127,7 @@ namespace ProgressiveSample
 
         private void FixedUpdate()
         {
-            if (!isCurrentState)
-                return;
+            if (!isCurrentState) return;
             if (!isOwner) return;
             
             DetectSuckables();
@@ -128,7 +136,7 @@ namespace ProgressiveSample
 
         private void DetectSuckables()
         {
-            if (_capturedItems.Count >= maxCapacity) return;
+            if (currentCapacity >= maxCapacity) return;
 
             int count = Physics.OverlapSphereNonAlloc(_suckPoint.position, _coneRange, _overlapResults, _suckableLayers);
             
@@ -148,7 +156,7 @@ namespace ProgressiveSample
                 
                 if (_debugMode) Debug.Log($"[PlayerSuck] Found ISuckable: {col.name}");
                 
-                if (IsBeingSucked(suckable) || _capturedItems.Contains(suckable)) continue;
+                if (IsBeingSucked(suckable)) continue;
                 if (!suckable.rigidbody)
                 {
                     if (_debugMode) Debug.LogWarning($"[PlayerSuck] {col.name} has no rigidbody!");
@@ -219,7 +227,7 @@ namespace ProgressiveSample
 
                 if (distance < _captureDistance)
                 {
-                    CaptureItem(suckable, state);
+                    CaptureItem(suckable);
                     _toRemoveIndices.Add(i);
                     continue;
                 }
@@ -264,23 +272,26 @@ namespace ProgressiveSample
             }
         }
 
-        private void CaptureItem(ISuckable suckable, SuckingState state)
+        private void CaptureItem(ISuckable suckable)
         {
-            if (_capturedItems.Count < maxCapacity)
-            {
-                _capturedItems.Add(suckable);
-                suckable.SetVisible(false);
-                if(InstanceHandler.TryGetInstance(out NetworkAudioHelper helper))
-                    helper.PlayRandom(_pickupSounds, transform.position, Random.Range(_pitchRange.x, _pitchRange.y));
-                onCapturedItemsChanged?.Invoke(_capturedItems.Count);
-                
-                if (_debugMode && state.Rigidbody != null) 
-                    Debug.Log($"[PlayerSuck] Captured: {state.Rigidbody.name}");
-            }
+            if (currentCapacity >= maxCapacity) return;
+
+            var type = suckable.GetType();
+            var prefabId = suckable.prefabId;
+
+            if (_capturedItems.TryGetValue(type, out var entry))
+                _capturedItems[type] = (entry.count + 1, entry.prefabId);
             else
-            {
-                RestoreRigidbody(state);
-            }
+                _capturedItems[type] = (1, prefabId);
+
+            if(InstanceHandler.TryGetInstance(out NetworkAudioHelper helper))
+                helper.PlayRandom(_pickupSounds, transform.position, Random.Range(_pitchRange.x, _pitchRange.y));
+
+            suckable.networkIdentity.Despawn();
+
+            onCapturedItemsChanged?.Invoke(currentCapacity);
+            
+            if (_debugMode) Debug.Log($"[PlayerSuck] Captured and destroyed: {type.Name} (prefabId: {prefabId})");
 
             if (maxCapacityStep >= 1)
                 OnStopSuck(default);
@@ -289,9 +300,8 @@ namespace ProgressiveSample
         private void ReleaseAllBeingSucked()
         {
             for (int i = 0; i < _beingSuckedValues.Count; i++)
-            {
                 RestoreRigidbody(_beingSuckedValues[i]);
-            }
+
             _beingSuckedKeys.Clear();
             _beingSuckedValues.Clear();
         }
@@ -299,38 +309,53 @@ namespace ProgressiveSample
         private void RestoreRigidbody(SuckingState state)
         {
             if (state.Rigidbody == null) return;
-            
             state.Rigidbody.useGravity = state.WasGravityEnabled;
             state.Rigidbody.linearDamping = state.WasDrag;
         }
 
         public Loot TakeOneLoot()
         {
-            if (_capturedItems.Count == 0) return null;
-            
-            int lastIndex = _capturedItems.Count - 1;
-            var item = _capturedItems[lastIndex];
-            _capturedItems.RemoveAt(lastIndex);
-            onCapturedItemsChanged?.Invoke(_capturedItems.Count);
-            
-            return item as Loot;
+            foreach (var type in _capturedItems.Keys)
+            {
+                var entry = _capturedItems[type];
+                if (entry.count <= 0) continue;
+
+                if (!NetworkManager.main.prefabProvider.TryGetPrefabData(entry.prefabId, out var prefabData))
+                {
+                    if (_debugMode) Debug.LogWarning($"[PlayerSuck] Failed to get prefab data for prefabId: {entry.prefabId}");
+                    return null;
+                }
+
+                var spawned = Instantiate(prefabData.prefab, transform.position, Quaternion.identity);
+                var loot = spawned.GetComponent<Loot>();
+
+                if (entry.count - 1 <= 0)
+                    _capturedItems.Remove(type);
+                else
+                    _capturedItems[type] = (entry.count - 1, entry.prefabId);
+
+                onCapturedItemsChanged?.Invoke(currentCapacity);
+                return loot;
+            }
+
+            return null;
         }
 
         public void ReleaseCapturedItems()
         {
-            for (int i = 0; i < _capturedItems.Count; i++)
+            foreach (var type in _capturedItems.Keys)
             {
-                var item = _capturedItems[i];
-                if (item is Component comp && comp != null)
+                var entry = _capturedItems[type];
+                if (!NetworkManager.main.prefabProvider.TryGetPrefabData(entry.prefabId, out var prefabData))
+                    continue;
+
+                for (int i = 0; i < entry.count; i++)
                 {
-                    comp.gameObject.SetActive(true);
-                    if (comp.TryGetComponent<Rigidbody>(out var rb))
-                    {
-                        rb.useGravity = true;
-                        rb.linearDamping = 0f;
-                    }
+                    var offset = Random.insideUnitSphere * 0.5f;
+                    Instantiate(prefabData.prefab, transform.position + offset, Quaternion.identity);
                 }
             }
+
             _capturedItems.Clear();
             onCapturedItemsChanged?.Invoke(0);
         }
