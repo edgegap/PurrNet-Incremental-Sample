@@ -13,13 +13,13 @@ This sample is designed to show how PurrNet handles a full gameplay loop with mi
 
 This sample covers a complete multiplayer incremental game loop with simple polish (audio & visual), including:
 
-- **Dash-to-harvest** — Dash through resources to break them and collect loot
-- **Vacuum mechanic** — Suck up dropped loot and bring it back to your base
-- **Upgrade system** — Spend wood on upgrades: movement speed, damage, dash distance, inventory space, wood per tree, and a win condition
-- **Infinite-world feel** — Noise-based resource spawning around players with automatic cleanup
-- **Object pooling** — Trees and loot use PurrNet's built-in pooling for performance
-- **Networked audio** — Pooled network audio for tree chopping and other SFX
-- **Networked state machine** — Player states (movement, dash, suck) synced automatically via PurrNet's plug-n-play state machine
+- **Dash-to-harvest**: Dash through resources to break them and collect loot
+- **Vacuum mechanic**: Suck up dropped loot and bring it back to your base
+- **Upgrade system**: Spend wood on upgrades: movement speed, damage, dash distance, inventory space, wood per tree, and a win condition
+- **Infinite-world feel**: Noise-based resource spawning around players with automatic cleanup
+- **Object pooling**: Trees and loot use PurrNet's built-in pooling for performance
+- **Networked audio**: Pooled network audio for tree chopping and other SFX
+- **Networked state machine**: Player states (movement, dash, suck) synced automatically via PurrNet's plug-n-play state machine
 
 ## PurrNet Features Demonstrated
 
