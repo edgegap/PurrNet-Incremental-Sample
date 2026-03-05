@@ -2,7 +2,7 @@
 
 ![Incremental Game Sample](gameplay.gif)
 
-A multiplayer incremental game sample built with **[PurrNet](https://github.com/PurrNet/PurrNet)** — the purrfect Unity networking solution.
+A multiplayer incremental game sample built with **[PurrNet](https://github.com/PurrNet/PurrNet)** - the purrfect Unity networking solution.
 
 Collect resources, dash through trees, suck up loot, upgrade your stats and race to the finish!
 This sample is designed to show how PurrNet handles a full gameplay loop with minimal networking boilerplate.
@@ -36,9 +36,9 @@ This sample covers a complete multiplayer incremental game loop with simple poli
 
 ## Getting Started
 
-### Requirements
+### Sample made with
 
-- Unity (version TBD)
+- Unity 6 (6000.3.6f1)
 - [PurrNet](https://github.com/PurrNet/PurrNet)
 - Cinemachine
 - New Unity Input System
@@ -64,26 +64,26 @@ Assets/
 
 ### Key Components
 
-**Player** — Built on PurrNet's networked state machine with three states:
-- **Movement** — Simple rigidbody movement (~100 lines including state handling)
-- **Dash** — Directional dash that passes through resources, temporarily becoming a trigger collider
-- **Suck** — Cone-based vacuum that takes ownership of loot, pulls it in with physics, and adds it to inventory
+**Player**: Built on PurrNet's networked state machine with three states:
+- **Movement**: Simple rigidbody movement (~100 lines including state handling)
+- **Dash**: Directional dash that passes through resources, temporarily becoming a trigger collider
+- **Suck**: Cone-based vacuum that takes ownership of loot, pulls it in with physics, and adds it to inventory
 
-**Base** — Syncs the wood count, visually sucks loot from the player's inventory, and despawns it on contact.
+**Base**: Syncs the wood count, visually sucks loot from the player's inventory, and despawns it on contact.
 
-**Resources** — Trees with synced health. Whoever hits a resource takes ownership and applies damage immediately for responsive feel regardless of host status. Drops loot on death based on player upgrades.
+**Resources**: Trees with synced health. Whoever hits a resource takes ownership and applies damage immediately for responsive feel regardless of host status. Drops loot on death based on player upgrades.
 
-**Resource Spawner** — Noise-driven, layer-based spawner on the GameManager. Spawns resources around active players, cleans up when players leave the area, and respawns harvested resources after an interval. Frame-budgeted to avoid hitches.
+**Resource Spawner**: Noise-driven, layer-based spawner on the GameManager. Spawns resources around active players, cleans up when players leave the area, and respawns harvested resources after an interval. Frame-budgeted to avoid hitches.
 
-**Upgrades** — Scriptable-based upgrade definitions populated through the `PlayerUpgrades` component. Easy to extend with new upgrade types.
+**Upgrades**: Scriptable-based upgrade definitions populated through the `PlayerUpgrades` component. Easy to extend with new upgrade types.
 
 ## Scaling & Extending
 
 The setup is built to be easy to scale on:
 
-- **Upgrades** — Add new ScriptableObjects to define new upgrade types
-- **Resources** — The spawner is layer-based and modular; add new resource types with different conditions and rarities
-- **Player states** — Drop in new states to the state machine as needed
+- **Upgrades**: Add new ScriptableObjects to define new upgrade types
+- **Resources**: The spawner is layer-based and modular; add new resource types with different conditions and rarities
+- **Player states**: Drop in new states to the state machine as needed
 
 ## Credits
 
