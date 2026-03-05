@@ -290,5 +290,13 @@ namespace ProgressiveSample
         {
             _woodCount.value++;
         }
+
+#if UNITY_EDITOR
+        [ServerRpc, PurrButton, ContextMenu("Give 100 Wood")]
+        private void Give100Wood()
+        {
+            _woodCount.value += 100;
+        }
+#endif
     }
 }
