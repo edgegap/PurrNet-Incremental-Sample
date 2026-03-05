@@ -48,7 +48,7 @@ This sample covers a complete multiplayer incremental game loop with simple poli
 1. Clone or download this repository
 2. Open the project in Unity
 3. Open `Scenes/GameScene`
-4. Press Play — you should see your player spawn, be able to run around, chop trees, suck up loot and dump it at your base
+4. Press Play. You should see your player spawn, be able to run around, chop trees, suck up loot and dump it at your base
 
 To test multiplayer, spin up a clone and connect!
 
