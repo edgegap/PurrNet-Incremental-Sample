@@ -32,6 +32,10 @@ namespace ProgressiveSample
                 _audioSourceTransform = new GameObject("LocalAudio").transform;
                 _audioSourceTransform.gameObject.AddComponent<AudioListener>();
             }
+            else
+            {
+                _rb.isKinematic = true;
+            }
         }
 
         public override void Enter()
