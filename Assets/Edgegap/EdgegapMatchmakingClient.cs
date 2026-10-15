@@ -352,10 +352,19 @@ public class EdgegapMatchmakingClient : MonoBehaviour
         else
             Debug.LogError($"Edgegap MM | Transport is {nm.transport?.GetType().Name}, expected UDPTransport.");
 
+        clientStartedAt = Time.realtimeSinceStartup;
         nm.StartClient();
     }
 
-    private bool IsClientConnecting() => NetworkManager.main.clientState == ConnectionState.Connecting;
+    // StartClient is asynchronous: the state stays Disconnected for a few frames before Connecting.
+    private float clientStartedAt = -10f;
+
+    private bool IsClientConnecting()
+    {
+        ConnectionState state = NetworkManager.main.clientState;
+        return state == ConnectionState.Connecting
+            || (state == ConnectionState.Disconnected && Time.realtimeSinceStartup - clientStartedAt < 1f);
+    }
 
     private bool IsClientConnected() => NetworkManager.main != null && NetworkManager.main.clientState == ConnectionState.Connected;
 

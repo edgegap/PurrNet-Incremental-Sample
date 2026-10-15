@@ -9,7 +9,7 @@ This fork of [PurrNet-Incremental-Sample](https://github.com/PurrNet/PurrNet-Inc
 
 In both modes the server stops its own Edgegap deployment once the match is empty, so idle servers don't cost money. The game client never holds an Edgegap API token.
 
-Tested end to end with Unity `6000.3.11f1`, PurrNet commit `a311c06` (from `packages-lock.json`), the PurrNet `UDPTransport` and Edgegap Unity SDK `3.5.5`. Two players connected and played on the same Edgegap server, then the server stopped its deployment.
+Tested end to end with Unity `6000.3.11f1`, PurrNet commit `a311c06` (from `packages-lock.json`), the PurrNet `UDPTransport` and Edgegap Unity SDK `3.5.5`. In both modes, two players connected and played on the same Edgegap server. In matchmaker mode, both were matched onto the same server about 35 s after clicking Find Match. Each time, the server stopped its own deployment after the players left.
 
 ## What this fork adds
 
