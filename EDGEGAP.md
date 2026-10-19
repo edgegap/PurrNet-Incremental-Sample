@@ -25,7 +25,7 @@ The upstream game is unchanged, apart from one fix (see [Upstream changes](#upst
 | `Assets/Edgegap/Editor/EdgegapServerBuild.cs` | **Tools → Edgegap → Build Linux Dedicated Server**, plus command-line server and client builds. |
 | `Dockerfile`, `.dockerignore` | Container image for the server build. |
 | `matchmaker-config.json` | Matchmaker configuration to upload in the dashboard. |
-| `Packages/manifest.json` | Adds `com.edgegap.unity-sdk` 3.5.5. |
+| `Packages/manifest.json` | Adds `com.edgegap.unity-sdk` from the SDK's `main` branch, so the sample picks up SDK updates. See [Edgegap SDK updates](#edgegap-sdk-updates). |
 
 ## Requirements
 
@@ -113,6 +113,10 @@ git merge upstream/main
 ```
 
 Edgegap files live in their own folder, so conflicts are limited to `Packages/manifest.json`, `Packages/packages-lock.json` and the one line above. After merging, rebuild the server and run the two-client test again.
+
+## Edgegap SDK updates
+
+`Packages/manifest.json` points at the `main` branch of [edgegap-unity-sdk](https://github.com/edgegap/edgegap-unity-sdk), so new SDK releases reach the sample without a manifest change. Unity records the resolved commit in `Packages/packages-lock.json` the first time it opens the project. To pull a newer SDK into a project you already opened, delete the `com.edgegap.unity-sdk` entry from `packages-lock.json` (or remove and re-add the package) and let Unity resolve it again. To freeze a known version for a release build, replace `#main` with a tag such as `#3.5.5`.
 
 ## Notes
 

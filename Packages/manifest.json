@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.edgegap.unity-sdk": "https://github.com/edgegap/edgegap-unity-sdk.git#3.5.5",
+    "com.edgegap.unity-sdk": "https://github.com/edgegap/edgegap-unity-sdk.git#main",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.cinemachine": "3.1.6",
     "com.unity.collab-proxy": "2.11.2",
