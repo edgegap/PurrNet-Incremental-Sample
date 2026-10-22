@@ -77,7 +77,7 @@ The matchmaker is off by default. Turn it on once direct connection works:
 
 The `casual` profile matches 2 to 4 players.
 
-**Playing alone:** the profile lowers `min_team_size` to 1 after 30 s, but don't count on that. With the same profile shape (2 to 4 players, `"30"` expansion to 1, 5-minute `ticket_expiration_period`) on matchmaker 3.3.2, a lone ticket in Edgegap's FishNet sample was only given a server around its 5-minute expiry, not at 30 s. This sample's lone-player case was not tested. If no server comes before the ticket expires, the panel shows "No match found in time, try again." To play alone, use direct connection, or test the matchmaker with two clients.
+**Playing alone:** the profile lowers `min_team_size` to 1 after 20 s, and tickets expire after 30 s (`ticket_expiration_period`). With the earlier shape (`"30"` expansion to 1, 5-minute expiration) on matchmaker 3.3.2, a lone ticket in Edgegap's FishNet sample was only given a server around its expiry, so the expiration is now 30 s to keep that wait short. This sample's lone-player case was not tested. If no server comes before the ticket expires, the panel shows "No match found in time, try again." To play alone, use direct connection, or test the matchmaker with two clients.
 
 **Known limitation:** the server does not check that a connecting player holds a matchmaker ticket for this match, so anyone who learns the server address can join. Deployments stop themselves when no one joins or everyone leaves, which limits cost. Before production, validate each player against the match's tickets (`MM_TICKET_IDS` / the matchmaker API) or an auth token.
 
