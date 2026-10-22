@@ -9,7 +9,7 @@ This fork of [PurrNet-Incremental-Sample](https://github.com/PurrNet/PurrNet-Inc
 
 In both modes the server stops its own Edgegap deployment once the match is empty, so idle servers don't cost money. The game client never holds an Edgegap API token.
 
-Tested end to end with Unity `6000.3.11f1`, PurrNet commit `a311c06` (from `packages-lock.json`), the PurrNet `UDPTransport` and Edgegap Unity SDK `3.5.5`. In both modes, two players connected and played on the same Edgegap server. In matchmaker mode, both were matched onto the same server about 35 s after clicking Find Match. Each time, the server stopped its own deployment after the players left.
+**Tested versions:** Unity `6000.3.11f1`, PurrNet `v1.22.0-beta.11` (commit `a311c06`), Edgegap Unity SDK `3.5.5`, with the PurrNet `UDPTransport`; e2e verified on Edgegap on 2026-10-15. `Packages/manifest.json` pins both packages to these tags. In both modes, two players connected and played on the same Edgegap server. In matchmaker mode, both were matched onto the same server about 35 s after clicking Find Match. Each time, the server stopped its own deployment after the players left.
 
 ## What this fork adds
 
@@ -25,7 +25,7 @@ The upstream game is unchanged, apart from one fix (see [Upstream changes](#upst
 | `Assets/Edgegap/Editor/EdgegapServerBuild.cs` | **Tools → Edgegap → Build Linux Dedicated Server**, plus command-line server and client builds. |
 | `Dockerfile`, `.dockerignore` | Container image for the server build. |
 | `matchmaker-config.json` | Matchmaker configuration to upload in the dashboard. |
-| `Packages/manifest.json` | Adds `com.edgegap.unity-sdk` from the SDK's `main` branch, so the sample picks up SDK updates. See [Edgegap SDK updates](#edgegap-sdk-updates). |
+| `Packages/manifest.json` | Adds `com.edgegap.unity-sdk` pinned to `3.5.5`, and pins PurrNet to `v1.22.0-beta.11` instead of its `dev` branch. See [Package versions](#package-versions). |
 
 ## Requirements
 
@@ -75,7 +75,11 @@ The matchmaker is off by default. Turn it on once direct connection works:
 3. Select `Assets/Edgegap/Resources/EdgegapSettings.asset`. Tick **Use Edgegap Matchmaker**, then paste the matchmaker's **API URL** into **Matchmaker Url** and its **Auth Token** into **Matchmaker Auth Token**. The Auth Token is meant for game clients: it only allows matchmaking calls and gives no access to your Edgegap account.
 4. Rebuild the client, start it twice and click **Find Match** in both. The status goes through searching → match found → joining → connected, and both players land on the same server.
 
-The `casual` profile matches 2 to 4 players. It also lowers the minimum to 1 player after 30 s, but a lone player may only get a server close to the ticket's 5-minute expiry, so test with two clients.
+The `casual` profile matches 2 to 4 players.
+
+**Playing alone:** the profile lowers `min_team_size` to 1 after 30 s, but don't count on that. With the same profile shape (2 to 4 players, `"30"` expansion to 1, 5-minute `ticket_expiration_period`) on matchmaker 3.3.2, a lone ticket in Edgegap's FishNet sample was only given a server around its 5-minute expiry, not at 30 s. This sample's lone-player case was not tested. If no server comes before the ticket expires, the panel shows "No match found in time, try again." To play alone, use direct connection, or test the matchmaker with two clients.
+
+**Known limitation:** the server does not check that a connecting player holds a matchmaker ticket for this match, so anyone who learns the server address can join. Deployments stop themselves when no one joins or everyone leaves, which limits cost. Before production, validate each player against the match's tickets (`MM_TICKET_IDS` / the matchmaker API) or an auth token.
 
 ## Command-line options
 
@@ -114,12 +118,17 @@ git merge upstream/main
 
 Edgegap files live in their own folder, so conflicts are limited to `Packages/manifest.json`, `Packages/packages-lock.json` and the one line above. After merging, rebuild the server and run the two-client test again.
 
-## Edgegap SDK updates
+## Package versions
 
-`Packages/manifest.json` points at the `main` branch of [edgegap-unity-sdk](https://github.com/edgegap/edgegap-unity-sdk), so new SDK releases reach the sample without a manifest change. Unity records the resolved commit in `Packages/packages-lock.json` the first time it opens the project. To pull a newer SDK into a project you already opened, delete the `com.edgegap.unity-sdk` entry from `packages-lock.json` (or remove and re-add the package) and let Unity resolve it again. To freeze a known version for a release build, replace `#main` with a tag such as `#3.5.5`.
+`Packages/manifest.json` pins the two git packages to the versions the sample was tested with, so every clone builds the same code:
+
+- [edgegap-unity-sdk](https://github.com/edgegap/edgegap-unity-sdk) `#3.5.5` (release tag).
+- [PurrNet](https://github.com/PurrNet/PurrNet) `#v1.22.0-beta.11`, the tag on commit `a311c06`. The sample previously followed PurrNet's `dev` branch.
+
+To move to a newer release, change the tag after `#` in `manifest.json` (for example `#3.5.6` for the SDK), let Unity resolve it, then rebuild the server and run the two-client test again.
 
 ## Notes
 
 - The game uses PurrNet's permissive network rules (owner-authoritative movement and harvesting), as upstream does. That keeps the sample responsive but trusts clients. A competitive game should use stricter rules.
 - Free tier: one deployment at a time, and the matchmaker restarts every 3 hours (its URL and token stay the same).
-- Next steps for a real game: check the client's ticket ID on the server (`MM_TICKET_IDS`), handle players joining a match in progress (backfill), and move to a production matchmaker tier before launch.
+- Next steps for a real game: check the client's ticket ID on the server (`MM_TICKET_IDS`, see the known limitation above), handle players joining a match in progress (backfill), and move to a production matchmaker tier before launch.
