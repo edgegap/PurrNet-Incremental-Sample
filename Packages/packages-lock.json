@@ -229,7 +229,7 @@
       "url": "https://packages.unity.com"
     },
     "dev.purrnet.purrnet": {
-      "version": "https://github.com/PurrNet/PurrNet.git?path=/Assets/PurrNet#dev",
+      "version": "https://github.com/PurrNet/PurrNet.git?path=/Assets/PurrNet#v1.22.0-beta.11",
       "depth": 0,
       "source": "git",
       "dependencies": {

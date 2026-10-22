@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.edgegap.unity-sdk": "https://github.com/edgegap/edgegap-unity-sdk.git#main",
+    "com.edgegap.unity-sdk": "https://github.com/edgegap/edgegap-unity-sdk.git#3.5.5",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.cinemachine": "3.1.6",
     "com.unity.collab-proxy": "2.11.2",
@@ -13,7 +13,7 @@
     "com.unity.timeline": "1.8.10",
     "com.unity.ugui": "2.0.0",
     "com.unity.visualscripting": "1.9.9",
-    "dev.purrnet.purrnet": "https://github.com/PurrNet/PurrNet.git?path=/Assets/PurrNet#dev",
+    "dev.purrnet.purrnet": "https://github.com/PurrNet/PurrNet.git?path=/Assets/PurrNet#v1.22.0-beta.11",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
